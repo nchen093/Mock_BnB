@@ -3,7 +3,7 @@
 =======
 ## Database Schema Design
 
-![Database Schema](./Mock-bnb-schema.png)
+![Database Schema](./images/Mock-bnb-schema.png)
 
 ## API Documentation
 
