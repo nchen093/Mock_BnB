@@ -1,6 +1,7 @@
-<<<<<<< HEAD
 # Mock_BnB
+
 =======
+
 ## Database Schema Design
 
 ![Database Schema](./images/Mock-bnb-schema.png)
@@ -1529,4 +1530,3 @@ Return spots filtered by query parameters.
       }
     }
     ```
->>>>>>> d19fde6 (Initial commit)
