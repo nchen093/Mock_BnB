@@ -1,4 +1,3 @@
-# `Mock BnB`
 
 ## Database Schema Design
 
