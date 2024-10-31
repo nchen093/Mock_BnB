@@ -1,7 +1,3 @@
-# Mock_BnB
-
-=======
-
 ## Database Schema Design
 
 ![Database Schema](./images/Mock-bnb-schema.png)
