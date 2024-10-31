@@ -1,3 +1,4 @@
+
 ## Database Schema Design
 
 ![Database Schema](./images/Mock-bnb-schema.png)
@@ -51,7 +52,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - Route path: /user
+  - Route path: /user/:userId
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -399,7 +400,7 @@ Creates and returns a new spot.
 - Request
 
   - Method: POST
-  - Route path: /spot/:spotId
+  - Route path: /spots
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -477,7 +478,7 @@ Create and return a new image for a spot specified by id.
 
   - Method: POST
 
-  - Route path: /spot/:spotId/img
+  - Route path: /spot/:spotId/image
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -854,7 +855,7 @@ Create and return a new image for a review specified by id.
 - Request
 
 - Method: PUT
-- Route path: /spot/:spotId/review/img
+- Route path: /reviews/:reviewId/image
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -915,7 +916,7 @@ Update and return an existing review.
 - Request
 
 - Method: PATCH
-- Route path: /spot/:reviewId
+- Route path: /reviews/:reviewId
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -985,7 +986,7 @@ Delete an existing review.
 - Request
 
   - Method: DELETE
-  - Route path: /spot/:reviewId
+  - Route path: /reviews/:reviewId
   - Body: none
 
 - Successful Response
@@ -1384,7 +1385,7 @@ Delete an existing image for a Spot.
 - Request
 
   - Method: DELETE
-  - Route path: /spot/:spotId/img
+  - Route path: /spot/:spotId/image/:imageId
   - Body: none
 
 - Successful Response
@@ -1422,7 +1423,7 @@ Delete an existing image for a Review.
 - Request
 
 - Method: DELETE
-- Route path: /review/:reviewId/img
+- Route path: /review/:reviewId/image/:imageId
 - Body: none
 
 - Successful Response
