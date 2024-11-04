@@ -1,5 +1,20 @@
 {
+  "name": "mock_bnb",
+  "version": "1.0.0",
+  "description": "![Database Schema](./images/Mock-bnb-schema.png)",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm install --prefix backend",
+    "dev:backend": "npm run dev --prefix backend",
+    "sequelize": "npm run --prefix backend sequelize",
+    "sequelize-cli": "npm run --prefix backend sequelize-cli",
+    "start": "npm run start --prefix backend",
+    "build": "npm run build --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express-validator": "^7.2.0"
+    "mock_bnb": "file:"
   }
 }
