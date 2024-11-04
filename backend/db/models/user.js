@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Spot, {foreignKey: 'ownerId'})
       User.hasMany(models.Review, {foreignKey: 'userId'})
-      User.hasMany(models.Booking, {foreignKey: 'userId'})
+      User.hasMany(models.Booking, {foreignKey: 'userId', as:'owner_history'})
+      User.hasMany(models.Booking, {foreignKey: 'userId', as:'renter_history'})
     }
   }
 
