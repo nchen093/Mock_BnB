@@ -32,6 +32,12 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = "Bookings";
-    await queryInterface.bulkDelete("Booking", null, {});
+    await queryInterface.bulkDelete(
+      options,
+      {
+        spotId: [1, 2, 3], // Add conditions here if needed
+      },
+      {}
+    );
   },
 };
