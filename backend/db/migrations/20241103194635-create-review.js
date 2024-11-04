@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       stars: {
-        type: Sequelize.INTEGER(5),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       reviewImage: {
