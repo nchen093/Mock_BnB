@@ -1,7 +1,7 @@
 
 ## Database Schema Design
 
-![Database Schema](./images/Mock-bnb-schema.png)
+![Database Schema](./images/Mockbnb'database.png)
 
 ## API Documentation
 
