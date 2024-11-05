@@ -1,4 +1,3 @@
-
 ## Database Schema Design
 
 ![Database Schema](./images/Mock-bnb-schema.png)
@@ -52,7 +51,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId
+  - Route path: /session
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -96,7 +95,7 @@ information.
 - Request
 
   - Method: POST
-  - Route path: /user/login
+  - Route path: /session
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -166,7 +165,7 @@ user's information.
 - Request
 
   - Method: POST
-  - Route path: /user/signup
+  - Route path: api/users/
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -245,8 +244,6 @@ Returns all the spots.
 - Require Authentication: false
 - Request
 
-QUESTION FOR ALEX - CAN WE CHANGE SPOTS TO LOCATIONS??
-
 - Method: GET
 - Route path: /spots
 - Body: none
@@ -290,7 +287,8 @@ Returns all the spots owned (created) by the current user.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId/spots
+    <!-- - Route path: /user/:userId/spots -->
+    Route path: /session/spots
   - Body: none
 
 - Successful Response
@@ -656,7 +654,8 @@ Returns all the reviews written by the current user.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId/reviews
+  <!-- - Route path: /user/:userId/reviews -->
+  - Route path: /session/reviews
   - Body: none
 
 - Successful Response
@@ -1025,7 +1024,7 @@ Return all the bookings that the current user has made.
 - Request
 
   - Method: GET
-  - Route path: user/:userId/bookings/
+  - Route path: api/session/bookings/
   - Body: none
 
 - Successful Response
@@ -1231,6 +1230,7 @@ Update and return an existing booking.
 - Request
 
   - Method: PATCH
+  - Route path: /session/bookings/:bookingId
   - Route path: /user/bookings/:bookingId
   - Headers:
     - Content-Type: application/json
@@ -1332,6 +1332,7 @@ Delete an existing booking.
 - Request
 
   - Method: DELETE
+  - Route path: /session/bookings/:bookingId
   - Route path: /user/bookings/:bookingId
   - Body: none
 

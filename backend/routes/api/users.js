@@ -3,14 +3,7 @@ const bcrypt = require("bcryptjs");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const {
-  User,
-  Review,
-  ReviewImage,
-  Spot,
-  SpotImage,
-  Booking,
-} = require("../../db/models");
+const { User } = require("../../db/models");
 
 const router = express.Router();
 
