@@ -1,7 +1,4 @@
 const express = require("express");
-const { Op } = require("sequelize");
-const bcrypt = require("bcryptjs");
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
 const { User, Spot, Review, ReviewImage } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -21,9 +18,9 @@ const validateReview = [
     .notEmpty()
     .exists({ checkFalsy: true })
     .withMessage("Review text is required"),
-  check("rating")
+  check("stars")
     .notEmpty()
-    .exists({ checkFalsy: true })
+    .isInt({ min: 1, max: 5 })
     .withMessage("Rating must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
@@ -46,7 +43,7 @@ router.get("/", async (req, res) => {
 router.put("/:reviewId", validateReview, async (req, res) => {
   const { user } = req;
   const { reviewId } = req.params;
-  const { comment, rating } = req.body;
+  const { comment, stars } = req.body;
   try {
     const review = await Review.findByPk(reviewId);
 
@@ -58,7 +55,7 @@ router.put("/:reviewId", validateReview, async (req, res) => {
 
     if (review.userId === user.id) {
       review.comment = comment;
-      review.rating = rating;
+      review.stars = stars;
       await review.save();
       return res.status(200).json(review);
     }

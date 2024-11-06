@@ -1,12 +1,11 @@
 const express = require("express");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { User, Booking, Spot, Review, ReviewImage } = require("../../db/models");
+const { setTokenCookie } = require("../../utils/auth");
+const { User } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
-const bookingsRouter = require("./bookings.js");
 const router = express.Router();
 
 const validateLogin = [

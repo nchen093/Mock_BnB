@@ -2,20 +2,36 @@ const express = require("express");
 const router = express.Router();
 const { Op } = require("sequelize");
 const { User, Booking, Spot } = require("../../db/models");
-const { check, validationResult } = require("express-validator");
+const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
-//GET all bookings from the logged in user
-//This includes all parties involved in the booking
 
 const validateBooking = [
   check("startDate")
-    .notEmpty()
     .exists({ checkFalsy: true })
-    .withMessage("Please provide a start date."),
+    .withMessage("Please provide a start date.")
+    .isISO8601()
+    .withMessage("Please provide a valid date.")
+    .custom((value) => {
+      const startDate = new Date(value);
+      const now = new Date();
+      if (startDate < now) {
+        throw new Error("startDate cannot be in the past");
+      }
+      return true;
+    }),
   check("endDate")
-    .notEmpty()
     .exists({ checkFalsy: true })
-    .withMessage("Please provide an end date."),
+    .withMessage("Please provide an end date.")
+    .isISO8601()
+    .withMessage("Please provide a valid date.")
+    .custom((value, { req }) => {
+      const endDate = new Date(value);
+      const startDate = new Date(req.body.startDate);
+      if (endDate <= startDate) {
+        throw new Error("endDate cannot be on or before startDate");
+      }
+      return true;
+    }),
   handleValidationErrors,
 ];
 
@@ -43,9 +59,9 @@ router.get("/", async (req, res) => {
     });
 
     if (!bookings) {
-      return res.status(404).json({ message: "Bookings not found" });
+      return res.status(404).json({ message: "Booking is not found" });
     }
-    return res.json(bookings);
+    return res.status(200).json(bookings);
   } else {
     return res.status(401).json({
       message: "Unauthorized, User does not have access to this information",
@@ -127,7 +143,7 @@ router.delete("/:bookingId", async (req, res) => {
         });
       }
 
-      if (booking.userId === user.id) {
+      if (booking.renterId === user.id || booking.ownerId === user.id) {
         await booking.destroy();
         return res.status(200).json({ message: "Successfully deleted" });
       }
