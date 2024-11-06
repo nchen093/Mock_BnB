@@ -20,11 +20,6 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        // userId: {
-        //   type: Sequelize.INTEGER,
-        //   allowNull: false,
-        // },
-
         renterId: {
           type: Sequelize.INTEGER,
           allowNull: false,

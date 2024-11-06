@@ -287,8 +287,7 @@ Returns all the spots owned (created) by the current user.
 - Request
 
   - Method: GET
-    <!-- - Route path: /user/:userId/spots -->
-    Route path: /session/spots
+    Route path: /user/spots
   - Body: none
 
 - Successful Response
@@ -654,8 +653,7 @@ Returns all the reviews written by the current user.
 - Request
 
   - Method: GET
-  <!-- - Route path: /user/:userId/reviews -->
-  - Route path: /session/reviews
+  - Route path: /user/reviews
   - Body: none
 
 - Successful Response
@@ -854,7 +852,7 @@ Create and return a new image for a review specified by id.
 - Request
 
 - Method: PUT
-- Route path: /reviews/:reviewId/image
+- Route path: user/reviews/:reviewId/image
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -914,8 +912,8 @@ Update and return an existing review.
 - Require proper authorization: Review must belong to the current user
 - Request
 
-- Method: PATCH
-- Route path: /reviews/:reviewId
+- Method: PUT
+- Route path: /user/reviews/:reviewId
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -1024,7 +1022,7 @@ Return all the bookings that the current user has made.
 - Request
 
   - Method: GET
-  - Route path: api/session/bookings/
+  - Route path: api/user/bookings/
   - Body: none
 
 - Successful Response
@@ -1229,9 +1227,8 @@ Update and return an existing booking.
 - Require proper authorization: Booking must belong to the current user
 - Request
 
-  - Method: PATCH
-  - Route path: /session/bookings/:bookingId
-  - Route path: /user/bookings/:bookingId
+  - Method: PUT
+  - Route path: /api/user/bookings/:bookingId
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -1332,8 +1329,7 @@ Delete an existing booking.
 - Request
 
   - Method: DELETE
-  - Route path: /session/bookings/:bookingId
-  - Route path: /user/bookings/:bookingId
+  - Route path: /api/user/bookings/:bookingId
   - Body: none
 
 - Successful Response
