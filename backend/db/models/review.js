@@ -48,9 +48,6 @@ module.exports = (sequelize, DataTypes) => {
           isInt: true,
         },
       },
-      reviewImage: {
-        type: DataTypes.STRING,
-      },
     },
     {
       sequelize,

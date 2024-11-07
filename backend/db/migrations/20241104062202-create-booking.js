@@ -20,7 +20,11 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        userId: {
+        renterId: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+        },
+        ownerId: {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
