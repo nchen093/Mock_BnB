@@ -2,7 +2,7 @@ const express = require("express");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { User } = require("../../db/models");
+const { User, Booking, Spot, Review, ReviewImage } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
@@ -19,8 +19,7 @@ const validateLogin = [
   handleValidationErrors,
 ];
 
-//Used for restoring session user
-router.post("/", validateLogin, async (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
   const { credential, password } = req.body;
 
   const user = await User.unscoped().findOne({
@@ -50,9 +49,19 @@ router.post("/", validateLogin, async (req, res, next) => {
 
   await setTokenCookie(res, safeUser);
 
-  return res.json({
-    user: safeUser,
-  });
+  req.user = safeUser; // Attach the logged-in user to the req object
+
+  return safeUser;
+};
+
+// Used for restoring session user
+router.post("/", validateLogin, async (req, res, next) => {
+  try {
+    const safeUser = await authenticateUser(req, res, next);
+    return res.json({ user: safeUser });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // Used to logout the user
