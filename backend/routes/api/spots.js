@@ -64,6 +64,17 @@ const booking = require('../../db/models/booking');
         handleValidationErrors,
       ];
 
+      const queryVaidationRules = [
+        check('page').isInt({ min: 1 }).optional().withMessage("Page must be greater than or equal to 1"),
+        check('size').isInt({ min: 1, max: 20 }).optional().withMessage('Size must be between 1 and 20'),
+        check('maxLat').isFloat({ min: -90, max: 90 }).optional().withMessage("Maximum latitude is invalid"),
+        check('minLat').isFloat({ min: -90, max: 90 }).optional().withMessage("Minimum latitude is invalid"),
+        check('maxLng').isFloat({ min: -180, max: 180 }).optional().withMessage('Longitude must be within -180 and 180'),
+        check('minLng').isFloat({ min: -180, max: 180 }).optional().withMessage('Longitude must be within -180 and 180'),
+        check('minPrice').isFloat({ min: 0 }).optional().withMessage('Minimum price must be greater than or equal to 0'), 
+        check('maxPrice').isFloat({ min: 0 }).optional().withMessage('Maximum price must be greater than or equal to 0'), 
+        handleValidationErrors];
+
   //Delete a spot Image
   router.delete('/:spotId/spot-images/:imageId', requireAuth, async(req, res, next) => {
     const { spotId, imageId } = req.params;
@@ -473,11 +484,57 @@ const booking = require('../../db/models/booking');
         return res.status(500).json({ error: 'An unexpected error occurred while creating the spot.' });
         }
       });
-    
-  // GET all Spots
-  router.get('/', async(req, res) => {
+
+  // Add query and GET ALL Spot
+  router.get('/', queryVaidationRules, async(req, res) => {
+    let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query
+
+    page = parseInt(page);
+    size = parseInt(size);
+
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(size) || size < 1 || size > 20) size = 20;
+
+    const pagination = {};
+    if(page >= 1 && size >= 1) {
+      pagination.limit = size;
+      pagination.offset = size * (page -1);
+    }
+
+    const test = {};
+    if(maxLat || minLat) {
+      if(isFloat(maxLat) && maxLat >= -90 && maxLat <= 90 ) {
+        test.maxLat = {[Op.lte]: maxLat};
+      }
+
+      if(isFloat(minLat) && minLat >= -90 && minLat <= 90 ) {
+        test.minLat = {[Op.gte]: minLat};
+      }
+      
+      if(maxLng || minLng) {
+        if(isFloat(maxLng) && (maxLng) >= -180 && (minLng) <= 180 ) {
+          test.maxLng = {[Op.lte]: maxLng};
+        }
+
+        if(isFloat(minLng) && (minLng) >= -180 && (minLng) <= 180 ) {
+          test.minLng = {[Op.gte]: minLng};
+        }
+
+      if( maxPrice || minPrice ) {
+        if(isFloat(maxPrice) && (maxPrice) >= 0 ) {
+          test.maxPrice = {[Op.gte]: maxPrice};
+        }
+        if(isFloat(minPrice) && (minPrice) >= 0 ) {
+          test.minPrice = {[Op.lte]: minPrice};
+        } 
+      }
+    }
+  }
     try {
-        const spots = await Spot.findAll();
+        const spots = await Spot.findAll({
+          where: test,
+          ...pagination
+        });
         const spotsWithReviews = await Promise.all(spots.map(async (spot) => {
             const reviews = await Review.findAll({
                 where: { spotId: spot.id },
@@ -494,8 +551,12 @@ const booking = require('../../db/models/booking');
         }
         }));
 
-        return res.json({ Spots: spotsWithReviews })
-
+        return res.json(
+          { 
+          Spots: spotsWithReviews,
+          page,
+          size
+        })
 
     }catch(e) {
         console.error(e);
@@ -503,6 +564,8 @@ const booking = require('../../db/models/booking');
         return res.json({ error: 'An error occured while fetching spots' })
     }
   })
+
+  
 
 
   
