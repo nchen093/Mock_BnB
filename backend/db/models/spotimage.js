@@ -11,34 +11,31 @@ The models/index file will call this method automatically.*/
       SpotImage.belongsTo(models.Spot, { foreignKey: "spotId" });
     }
   }
-  SpotImage.init(
-    {
-      spotId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Spots",
-          key: "id",
-        },
-        onDelete: "CASCADE",
+  SpotImage.init({
+    spotId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Spots',
+        key: 'id'
       },
-      imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      preview: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-      },
+      onDelete: 'CASCADE',
     },
-    {
-      sequelize,
-      modelName: "SpotImage",
-      defaultScope: {
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
-        },
-      },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    preview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+  }, {
+    sequelize,
+    modelName: 'SpotImage',
+    defaultScope: {
+      attributes: {
+        exclude: ["createdAt", "updatedAt"]
+      }
     }
   );
   return SpotImage;

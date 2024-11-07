@@ -1,6 +1,6 @@
 ## Database Schema Design
 
-![Database Schema](./images/Mock-bnb-schema.png)
+![Database Schema](./images/Mockbnb'database.png)
 
 ## API Documentation
 
@@ -329,7 +329,7 @@ Returns the details of a spot specified by its id.
 - Request
 
   - Method: GET
-  - Route path: /spot/:spotId
+  - Route path: /spots/:spotId
   - Body: none
 
 - Successful Response
@@ -475,7 +475,7 @@ Create and return a new image for a spot specified by id.
 
   - Method: POST
 
-  - Route path: /spot/:spotId/image
+  - Route path: /spot/:spotId/images
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -523,7 +523,7 @@ Updates and returns an existing spot.
 - Require proper authorization: Spot must belong to the current user
 - Request
 
-  - Method: PATCH
+  - Method: PUT
   - Route path: /spot/:spotId
   - Headers:
     - Content-Type: application/json
