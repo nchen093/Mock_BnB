@@ -60,11 +60,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       lat: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
       lng: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
       name: {
@@ -79,12 +79,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.FLOAT,
         allowNull: false,
+        validate: {
+          min: 0,
+        }
       },
       previewImage: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
     },
     {
@@ -92,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Spot",
       defaultScope: {
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: [],
         },
       },
     }
