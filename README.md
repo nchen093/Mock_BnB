@@ -1,4 +1,3 @@
-
 ## Database Schema Design
 
 ![Database Schema](./images/Mockbnb'database.png)
@@ -52,7 +51,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId
+  - Route path: /session
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -96,7 +95,7 @@ information.
 - Request
 
   - Method: POST
-  - Route path: /user/login
+  - Route path: /session
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -166,7 +165,7 @@ user's information.
 - Request
 
   - Method: POST
-  - Route path: /user/signup
+  - Route path: api/users/
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -245,7 +244,6 @@ Returns all the spots.
 - Require Authentication: false
 - Request
 
-
 - Method: GET
 - Route path: /spots
 - Body: none
@@ -289,7 +287,7 @@ Returns all the spots owned (created) by the current user.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId/spots
+    Route path: /user/spots
   - Body: none
 
 - Successful Response
@@ -655,7 +653,7 @@ Returns all the reviews written by the current user.
 - Request
 
   - Method: GET
-  - Route path: /user/:userId/reviews
+  - Route path: /user/reviews
   - Body: none
 
 - Successful Response
@@ -854,7 +852,7 @@ Create and return a new image for a review specified by id.
 - Request
 
 - Method: PUT
-- Route path: /reviews/:reviewId/image
+- Route path: user/reviews/:reviewId/image
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -914,8 +912,8 @@ Update and return an existing review.
 - Require proper authorization: Review must belong to the current user
 - Request
 
-- Method: PATCH
-- Route path: /reviews/:reviewId
+- Method: PUT
+- Route path: /user/reviews/:reviewId
 - Headers:
   - Content-Type: application/json
 - Body:
@@ -1024,7 +1022,7 @@ Return all the bookings that the current user has made.
 - Request
 
   - Method: GET
-  - Route path: user/:userId/bookings/
+  - Route path: api/user/bookings/
   - Body: none
 
 - Successful Response
@@ -1229,8 +1227,8 @@ Update and return an existing booking.
 - Require proper authorization: Booking must belong to the current user
 - Request
 
-  - Method: PATCH
-  - Route path: /user/bookings/:bookingId
+  - Method: PUT
+  - Route path: /api/user/bookings/:bookingId
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -1331,7 +1329,7 @@ Delete an existing booking.
 - Request
 
   - Method: DELETE
-  - Route path: /user/bookings/:bookingId
+  - Route path: /api/user/bookings/:bookingId
   - Body: none
 
 - Successful Response

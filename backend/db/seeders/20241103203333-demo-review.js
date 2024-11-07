@@ -27,7 +27,7 @@ module.exports = {
         userId: 3,
         comment: "This spot is amazing",
         stars: 5,
-      }
+      },
     ]);
   },
 
