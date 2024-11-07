@@ -3,6 +3,7 @@ const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
 const currentUserRouter = require("./current-user.js");
 const reviewRouter = require("./reviews.js");
+const spotsRouter = require("./spots.js");
 
 const { restoreUser } = require("../../utils/auth.js");
 

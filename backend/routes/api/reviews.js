@@ -6,7 +6,7 @@ const { handleValidationErrors } = require("../../utils/validation");
 const router = express.Router();
 
 const validateImage = [
-  check("imageUrl")
+  check("url")
     .notEmpty()
     .isURL()
     .withMessage("Please provide a valid image URL."),
@@ -56,7 +56,7 @@ router.delete("/:reviewId/images/:imageId", async (req, res) => {
 router.post("/:reviewId/images", validateImage, async (req, res) => {
   const { user } = req;
   const { reviewId } = req.params;
-  const { imageUrl } = req.body;
+  const { url } = req.body;
 
   try {
     const review = await Review.findByPk(reviewId);
@@ -79,13 +79,11 @@ router.post("/:reviewId/images", validateImage, async (req, res) => {
     }
 
     if (review.userId === user.id) {
-      const reviewImage = await ReviewImage.create({
+      const imageUrl = await ReviewImage.create({
         reviewId,
-        imageUrl,
+        url,
       });
-      return res
-        .status(201)
-        .json({ id: reviewImage.id, url: reviewImage.imageUrl });
+      return res.status(201).json({ id: imageUrl.reviewId, url: imageUrl.url });
     }
   } catch (error) {
     res.status(401).json({ message: "Review is not valid" });
