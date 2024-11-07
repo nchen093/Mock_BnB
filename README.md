@@ -245,7 +245,6 @@ Returns all the spots.
 - Require Authentication: false
 - Request
 
-QUESTION FOR ALEX - CAN WE CHANGE SPOTS TO LOCATIONS??
 
 - Method: GET
 - Route path: /spots
@@ -332,7 +331,7 @@ Returns the details of a spot specified by its id.
 - Request
 
   - Method: GET
-  - Route path: /spot/:spotId
+  - Route path: /spots/:spotId
   - Body: none
 
 - Successful Response
@@ -478,7 +477,7 @@ Create and return a new image for a spot specified by id.
 
   - Method: POST
 
-  - Route path: /spot/:spotId/image
+  - Route path: /spot/:spotId/images
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -526,7 +525,7 @@ Updates and returns an existing spot.
 - Require proper authorization: Spot must belong to the current user
 - Request
 
-  - Method: PATCH
+  - Method: PUT
   - Route path: /spot/:spotId
   - Headers:
     - Content-Type: application/json
