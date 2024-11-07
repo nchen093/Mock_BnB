@@ -20,8 +20,12 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
-        imageUrl: {
+        url: {
           type: Sequelize.STRING,
+          allowNull: false,
+        },
+        preview: {
+          type: Sequelize.BOOLEAN,
           allowNull: false,
         },
         createdAt: {
