@@ -35,65 +35,6 @@ const validateBooking = [
   handleValidationErrors,
 ];
 
-router.get("/", async (req, res) => {
-  const { user } = req;
-  console.log(user);
-  if (user) {
-    const bookings = await Booking.findAll({
-      where: {
-        [Op.or]: [{ renterId: user.id }, { ownerId: user.id }],
-      },
-      include: [
-        {
-          model: Spot,
-        },
-        {
-          model: User,
-          as: "renter_history",
-        },
-        {
-          model: User,
-          as: "owner_history",
-        },
-      ],
-    });
-
-    if (!bookings) {
-      return res.status(404).json({ message: "Booking is not found" });
-    }
-    return res.status(200).json(bookings);
-  } else {
-    return res.status(401).json({
-      message: "Unauthorized, User does not have access to this information",
-    });
-  }
-});
-
-//POST all bookings from the logged in user
-router.post("/", async (req, res) => {
-  const { user } = req;
-  try {
-    if (user) {
-      const { spotId, startDate, endDate } = req.body;
-      const spot = await Spot.findByPk(spotId);
-      if (!spot) {
-        return res.status(404).json({ message: "Spot not found" });
-      }
-      const ownerId = spot.ownerId === user.id ? user.id : null;
-      const booking = await Booking.create({
-        spotId,
-        renterId: user.id,
-        ownerId: ownerId,
-        startDate,
-        endDate,
-      });
-      return res.status(200).json(booking);
-    }
-  } catch (err) {
-    return res.status(401).json({ message: "Issue with creating the booking" });
-  }
-});
-
 // EDIT a booking by Id
 router.put("/:bookingId", validateBooking, async (req, res, next) => {
   try {
@@ -150,6 +91,65 @@ router.delete("/:bookingId", async (req, res) => {
     }
   } catch (err) {
     return res.status(401).json({ message: "Issue with deleting the booking" });
+  }
+});
+
+router.get("/", async (req, res) => {
+  const { user } = req;
+  console.log(user);
+  if (user) {
+    const bookings = await Booking.findAll({
+      where: {
+        [Op.or]: [{ renterId: user.id }, { ownerId: user.id }],
+      },
+      include: [
+        {
+          model: Spot,
+        },
+        {
+          model: User,
+          as: "renter_history",
+        },
+        {
+          model: User,
+          as: "owner_history",
+        },
+      ],
+    });
+
+    if (!bookings) {
+      return res.status(404).json({ message: "Booking is not found" });
+    }
+    return res.status(200).json(bookings);
+  } else {
+    return res.status(401).json({
+      message: "Unauthorized, User does not have access to this information",
+    });
+  }
+});
+
+//POST all bookings from the logged in user
+router.post("/", async (req, res) => {
+  const { user } = req;
+  try {
+    if (user) {
+      const { spotId, startDate, endDate } = req.body;
+      const spot = await Spot.findByPk(spotId);
+      if (!spot) {
+        return res.status(404).json({ message: "Spot not found" });
+      }
+      const ownerId = spot.ownerId === user.id ? user.id : null;
+      const booking = await Booking.create({
+        spotId,
+        renterId: user.id,
+        ownerId: ownerId,
+        startDate,
+        endDate,
+      });
+      return res.status(200).json(booking);
+    }
+  } catch (err) {
+    return res.status(401).json({ message: "Issue with creating the booking" });
   }
 });
 

@@ -25,18 +25,70 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-router.get("/", async (req, res) => {
+router.delete("/:reviewId/images/:imageId", async (req, res) => {
   const { user } = req;
+  const { imageId, reviewId } = req.params;
   try {
-    const reviews = await Review.findAll({
-      where: {
-        userId: user.id,
-      },
-      include: [User, Spot, ReviewImage],
+    const reviewImage = await ReviewImage.findByPk(imageId, {
+      include: Review,
     });
-    return res.status(200).json(reviews);
+
+    if (!reviewImage) {
+      return res.status(404).json({ message: "Image does not exist" });
+    }
+
+    const review = await Review.findByPk(reviewImage.reviewId);
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    if (!reviewImage) {
+      return res.status(404).json({ message: "Image not found" });
+    }
+
+    await reviewImage.destroy();
+    return res.status(200).json({ message: "Image has been deleted" });
   } catch (error) {
-    console.error(error);
+    res.status(401).json({ message: "Image is not valid" });
+  }
+});
+
+router.post("/:reviewId/images", validateImage, async (req, res) => {
+  const { user } = req;
+  const { reviewId } = req.params;
+  const { imageUrl } = req.body;
+
+  try {
+    const review = await Review.findByPk(reviewId);
+    const reviewImages = await ReviewImage.findAll({ where: { reviewId } });
+
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    if (reviewImages.length >= 10) {
+      return res
+        .status(403)
+        .json({ message: "You can only upload 10 images per review" });
+    }
+
+    if (review.userId !== user.id) {
+      return res
+        .status(403)
+        .json({ message: "You do not have access to edit this review" });
+    }
+
+    if (review.userId === user.id) {
+      const reviewImage = await ReviewImage.create({
+        reviewId,
+        imageUrl,
+      });
+      return res
+        .status(201)
+        .json({ id: reviewImage.id, url: reviewImage.imageUrl });
+    }
+  } catch (error) {
+    res.status(401).json({ message: "Review is not valid" });
   }
 });
 
@@ -90,71 +142,19 @@ router.delete("/:reviewId", async (req, res) => {
   }
 });
 
-router.post("/:reviewId/images", validateImage, async (req, res) => {
+router.get("/", async (req, res) => {
   const { user } = req;
-  const { reviewId } = req.params;
-  const { imageUrl } = req.body;
-
   try {
-    const review = await Review.findByPk(reviewId);
-    const reviewImages = await ReviewImage.findAll({ where: { reviewId } });
-    console.log(reviewImages.length, "REVIEW IMAGES");
-
-    if (!review) {
-      return res.status(404).json({ message: "Review not found" });
-    }
-
-    if (reviewImages.length >= 10) {
-      return res
-        .status(403)
-        .json({ message: "You can only upload 10 images per review" });
-    }
-
-    if (review.userId !== user.id) {
-      return res
-        .status(403)
-        .json({ message: "You do not have access to edit this review" });
-    }
-
-    if (review.userId === user.id) {
-      const reviewImage = await ReviewImage.create({
-        reviewId,
-        imageUrl,
-      });
-      return res
-        .status(201)
-        .json({ id: reviewImage.id, url: reviewImage.imageUrl });
-    }
-  } catch (error) {
-    res.status(401).json({ message: "Review is not valid" });
-  }
-});
-
-router.delete("/:reviewId/images/:imageId", async (req, res) => {
-  const { user } = req;
-  const { imageId, reviewId } = req.params;
-  try {
-    const reviewImage = await ReviewImage.findByPk(imageId, {
-      include: Review,
+    const reviews = await Review.findAll({
+      where: {
+        userId: user.id,
+      },
+      include: [User, Spot, ReviewImage],
     });
-
-    if (!reviewImage) {
-      return res.status(404).json({ message: "Image does not exist" });
-    }
-
-    const review = await Review.findByPk(reviewImage.reviewId);
-    if (!review) {
-      return res.status(404).json({ message: "Review not found" });
-    }
-
-    if (!reviewImage) {
-      return res.status(404).json({ message: "Image not found" });
-    }
-
-    await reviewImage.destroy();
-    return res.status(200).json({ message: "Image has been deleted" });
+    return res.status(200).json(reviews);
   } catch (error) {
-    res.status(401).json({ message: "Image is not valid" });
+    console.error(error);
   }
 });
+
 module.exports = router;
