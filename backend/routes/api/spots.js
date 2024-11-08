@@ -5,6 +5,7 @@ const { requireAuth } = require("../../utils/auth");
 const { validationResult } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { Op } = require("sequelize");
+const sequelize = require("sequelize");
 
 const {
   User,
@@ -559,109 +560,63 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
 });
 
 // Add query and GET ALL Spot
-// router.get("/", queryValidationRules, async (req, res) => {
-//   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
-//     req.query;
-
-//   page = parseInt(page);
-//   size = parseInt(size);
-
-//   if (isNaN(page) || page < 1) page = 1;
-//   if (isNaN(size) || size < 1 || size > 20) size = 20;
-
-//   const pagination = {};
-//   if (page >= 1 && size >= 1) {
-//     pagination.limit = size;
-//     pagination.offset = size * (page - 1);
-//   }
-
-//   const test = {};
-//   if (minLat) test.lat = { [Op.gte]: parseFloat(minLat) };
-//   if (maxLat) test.lat = { ...test.lat, [Op.lte]: parseFloat(maxLat) };
-//   if (minLng) test.lng = { [Op.gte]: parseFloat(minLng) };
-//   if (maxLng) test.lng = { ...test.lng, [Op.lte]: parseFloat(maxLng) };
-//   if (minPrice) test.price = { [Op.gte]: parseFloat(minPrice) };
-//   if (maxPrice)
-//     test.price = { ...test.price, [Op.lte]: parseFloat(maxPrice) };
-//   try {
-//     const spots = await Spot.findAll({
-//       where: test,
-//       include: {
-//         model: Review,
-//         attributes: ['stars']
-//       },
-//       ...pagination,
-//     });
-//       const spotsWithReviews = await Promise.all(
-//         spots.map(async (spot) => {
-//         const reviews = spot.Reviews;
-  
-
-//         // calculate the avg of staring for a spot
-//         const sumStars = await reviews.reduce((sum, review) => sum + review.dataValues.stars, 0);
-//         const avgRating = sumStars / reviews.length;
-
-//         return {
-//           ...spot.dataValues,
-//           avgRating,
-//         };
-//       })
-//     )
-
-//     return res.json({
-//       Spots: spotsWithReviews,
-//       page,
-//       size,
-//     });
-//   } catch (e) {
-//     console.error(e);
-//     res.status(500);
-//     return res.json({ error: "An error occured while fetching spots" });
-//   }
-// });
-
 router.get("/", queryValidationRules, async (req, res) => {
-  const {
-    page = 1,
-    size = 20,
-    minLat,
-    maxLat,
-    minLng,
-    maxLng,
-    minPrice,
-    maxPrice,
-  } = req.query;
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
 
-  const where = {};
-  if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
-  if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
-  if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
-  if (maxLng) where.lng = { ...where.lng, [Op.lte]: parseFloat(maxLng) };
-  if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
-  if (maxPrice)
-    where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
+  page = parseInt(page);
+  size = parseInt(size);
 
-  const limit = parseInt(size);
-  const offset = (parseInt(page) - 1) * limit;
+  if (isNaN(page) || page < 1) page = 1;
+  if (isNaN(size) || size < 1 || size > 20) size = 20;
+
+  const pagination = {};
+  if (page >= 1 && size >= 1) {
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+  }
+
+  const test = {};
+  if (minLat) test.lat = { [Op.gte]: parseFloat(minLat) };
+  if (maxLat) test.lat = { ...test.lat, [Op.lte]: parseFloat(maxLat) };
+  if (minLng) test.lng = { [Op.gte]: parseFloat(minLng) };
+  if (maxLng) test.lng = { ...test.lng, [Op.lte]: parseFloat(maxLng) };
+  if (minPrice) test.price = { [Op.gte]: parseFloat(minPrice) };
+  if (maxPrice) test.price = { ...test.price, [Op.lte]: parseFloat(maxPrice) };
 
   try {
     const spots = await Spot.findAll({
-      where,
-      limit,
-      offset,
+      where: test,
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+              SELECT AVG("stars")
+              FROM "Reviews"
+              WHERE "Reviews"."spotId" = "Spot"."id"
+            )`),
+            "avgRating",
+          ],
+        ],
+      },
+      ...pagination,
     });
 
-    return res.status(200).json({
-      Spots: spots,
-      page: parseInt(page),
-      size: parseInt(size),
+    const spotsWithReviews = spots.map((spot) => ({
+      ...spot.dataValues,
+      avgRating: parseFloat(spot.dataValues.avgRating) || 0, // Handle cases where there are no reviews
+    }));
+
+    return res.json({
+      Spots: spotsWithReviews,
+      page,
+      size,
     });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+  } catch (e) {
+    console.error(e);
+    res.status(500);
+    return res.json({ error: "An error occured while fetching spots" });
   }
 });
-
 
 module.exports = router;
