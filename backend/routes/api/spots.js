@@ -559,87 +559,109 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
 });
 
 // Add query and GET ALL Spot
+// router.get("/", queryValidationRules, async (req, res) => {
+//   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+//     req.query;
+
+//   page = parseInt(page);
+//   size = parseInt(size);
+
+//   if (isNaN(page) || page < 1) page = 1;
+//   if (isNaN(size) || size < 1 || size > 20) size = 20;
+
+//   const pagination = {};
+//   if (page >= 1 && size >= 1) {
+//     pagination.limit = size;
+//     pagination.offset = size * (page - 1);
+//   }
+
+//   const test = {};
+//   if (minLat) test.lat = { [Op.gte]: parseFloat(minLat) };
+//   if (maxLat) test.lat = { ...test.lat, [Op.lte]: parseFloat(maxLat) };
+//   if (minLng) test.lng = { [Op.gte]: parseFloat(minLng) };
+//   if (maxLng) test.lng = { ...test.lng, [Op.lte]: parseFloat(maxLng) };
+//   if (minPrice) test.price = { [Op.gte]: parseFloat(minPrice) };
+//   if (maxPrice)
+//     test.price = { ...test.price, [Op.lte]: parseFloat(maxPrice) };
+//   try {
+//     const spots = await Spot.findAll({
+//       where: test,
+//       include: {
+//         model: Review,
+//         attributes: ['stars']
+//       },
+//       ...pagination,
+//     });
+//       const spotsWithReviews = await Promise.all(
+//         spots.map(async (spot) => {
+//         const reviews = spot.Reviews;
+  
+
+//         // calculate the avg of staring for a spot
+//         const sumStars = await reviews.reduce((sum, review) => sum + review.dataValues.stars, 0);
+//         const avgRating = sumStars / reviews.length;
+
+//         return {
+//           ...spot.dataValues,
+//           avgRating,
+//         };
+//       })
+//     )
+
+//     return res.json({
+//       Spots: spotsWithReviews,
+//       page,
+//       size,
+//     });
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500);
+//     return res.json({ error: "An error occured while fetching spots" });
+//   }
+// });
+
 router.get("/", queryValidationRules, async (req, res) => {
-  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
-    req.query;
+  const {
+    page = 1,
+    size = 20,
+    minLat,
+    maxLat,
+    minLng,
+    maxLng,
+    minPrice,
+    maxPrice,
+  } = req.query;
 
-  page = parseInt(page);
-  size = parseInt(size);
+  const where = {};
+  if (minLat) where.lat = { [Op.gte]: parseFloat(minLat) };
+  if (maxLat) where.lat = { ...where.lat, [Op.lte]: parseFloat(maxLat) };
+  if (minLng) where.lng = { [Op.gte]: parseFloat(minLng) };
+  if (maxLng) where.lng = { ...where.lng, [Op.lte]: parseFloat(maxLng) };
+  if (minPrice) where.price = { [Op.gte]: parseFloat(minPrice) };
+  if (maxPrice)
+    where.price = { ...where.price, [Op.lte]: parseFloat(maxPrice) };
 
-  if (isNaN(page) || page < 1) page = 1;
-  if (isNaN(size) || size < 1 || size > 20) size = 20;
+  const limit = parseInt(size);
+  const offset = (parseInt(page) - 1) * limit;
 
-  const pagination = {};
-  if (page >= 1 && size >= 1) {
-    pagination.limit = size;
-    pagination.offset = size * (page - 1);
-  }
-
-  const test = {};
-  if (maxLat || minLat) {
-    if (!isNaN(parseFloat(maxLat)) && maxLat >= -90 && maxLat <= 90) {
-      test.maxLat = { [Op.lte]: maxLat };
-    }
-
-    if (!isNaN(parseFloat(minLat)) && minLat >= -90 && minLat <= 90) {
-      test.minLat = { [Op.gte]: minLat };
-    }
-
-    if (maxLng || minLng) {
-      if (!isNaN(parseFloat(maxLng)) && maxLng >= -180 && minLng <= 180) {
-        test.maxLng = { [Op.lte]: maxLng };
-      }
-
-      if (!isNaN(parseFloat(minLng)) && minLng >= -180 && minLng <= 180) {
-        test.minLng = { [Op.gte]: minLng };
-      }
-
-      if (maxPrice || minPrice) {
-        if (!isNaN(parseFloat(maxPrice)) && maxPrice >= 0) {
-          test.maxPrice = { [Op.gte]: maxPrice };
-        }
-        if (!isNaN(parseFloat(minPrice)) && minPrice >= 0) {
-          test.minPrice = { [Op.lte]: minPrice };
-        }
-      }
-    }
-  }
   try {
     const spots = await Spot.findAll({
-      where: test,
-      ...pagination,
+      where,
+      limit,
+      offset,
     });
-    const spotsWithReviews = await Promise.all(
-      spots.map(async (spot) => {
-        const reviews = await Review.findAll({
-          where: { spotId: spot.id },
-          attributes: ["stars"],
-        });
 
-        // calculate the avg of staring for a spot
-        const sumStars = await reviews.reduce(
-          (sum, review) => sum + review.dataValues.stars,
-          0
-        );
-        const avgRating = sumStars / reviews.length;
-
-        return {
-          ...spot.dataValues,
-          avgRating,
-        };
-      })
-    );
-
-    return res.json({
-      Spots: spotsWithReviews,
-      page,
-      size,
+    return res.status(200).json({
+      Spots: spots,
+      page: parseInt(page),
+      size: parseInt(size),
     });
-  } catch (e) {
-    console.error(e);
-    res.status(500);
-    return res.json({ error: "An error occured while fetching spots" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 });
+
 
 module.exports = router;
