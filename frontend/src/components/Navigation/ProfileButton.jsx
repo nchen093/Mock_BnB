@@ -5,6 +5,7 @@ import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
+import { MdMenu } from "react-icons/md";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -42,13 +43,14 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={toggleMenu}>
+      <button className="btnbox" onClick={toggleMenu}>
+        <MdMenu />
         <FaUserCircle />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
+            <li>Hello, {user.username}</li>
             <li>
               {user.firstName} {user.lastName}
             </li>
@@ -59,16 +61,22 @@ function ProfileButton({ user }) {
           </>
         ) : (
           <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
+            <div className="dropdown">
+              <li className="menu-item">
+                <OpenModalMenuItem
+                  itemText="Log In"
+                  onItemClick={closeMenu}
+                  modalComponent={<LoginFormModal />}
+                />
+              </li>
+              <li className="menu-item">
+                <OpenModalMenuItem
+                  itemText="Sign Up"
+                  onItemClick={closeMenu}
+                  modalComponent={<SignupFormModal />}
+                />
+              </li>
+            </div>
           </>
         )}
       </ul>

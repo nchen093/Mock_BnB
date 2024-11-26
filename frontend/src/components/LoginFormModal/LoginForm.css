@@ -1,1 +1,51 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-bottom: solid 1px;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  background-color: transparent;
+}
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  max-width: 500px;
+}
+
+.container input {
+  width: 100%;
+  box-sizing: border-box;
+  justify-self: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.container button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #74c0fc;
+  color: white;
+  border: none;
+}

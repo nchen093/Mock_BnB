@@ -2,21 +2,27 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
+import { FaAirbnb } from "react-icons/fa";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && (
+    <>
+      <ul className="nav-bar">
         <li>
-          <ProfileButton user={sessionUser} />
+          <NavLink to="/">
+            <FaAirbnb style={{ color: "#74C0FC" }} size={40} />
+            mockbnb
+          </NavLink>
         </li>
-      )}
-    </ul>
+        {isLoaded && (
+          <li className="userIcon">
+            <ProfileButton user={sessionUser} />
+          </li>
+        )}
+      </ul>
+    </>
   );
 }
 

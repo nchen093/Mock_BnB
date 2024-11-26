@@ -26,28 +26,34 @@ function LoginFormModal() {
 
   return (
     <>
-      <h1>Log In</h1>
+      <div className="header">
+        <h1>Log In</h1>
+        <button className="close-btn" onClick={closeModal}>
+          x
+        </button>
+      </div>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
+        <label style={{ fontWeight: "bold" }}>Welcome to Mockbnb</label>
+        <div className="container">
           <input
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
+            placeholder="Username or Email"
           />
-        </label>
-        <label>
-          Password
           <input
             type="password"
             value={password}
+            placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit">Log In</button>
+          {errors.credential && <p>{errors.credential}</p>}
+          <button className="login-btn" type="submit">
+            Log In
+          </button>
+        </div>
       </form>
     </>
   );

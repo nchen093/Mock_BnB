@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-bottom: solid 1px;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 600px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+}
+
+.container input {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  min-width: 500px;
+  max-width: 500px;
+  padding: 10px;
+}
+
+.container button {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 500px;
+  max-width: 500px;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  background-color: #74c0fc;
+  color: white;
+  border: none;
+}
