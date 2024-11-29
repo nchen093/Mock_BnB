@@ -131,7 +131,7 @@ module.exports = {
           "A peaceful forest retreat, hidden away in nature, perfect for getting away from the hustle and bustle of city life. Enjoy hiking trails and private hot tubs.",
         price: 400,
         previewImage:
-          "https://a0.muscache.com/im/pictures/3512590a-01b4-4795-9d6b-70f35b44cdb1.jpg",
+          "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/a0239672-a384-439d-be7e-3727bd170291.jpeg?im_w=960",
       },
       {
         ownerId: 9,

@@ -77,12 +77,12 @@ module.exports = {
       },
       {
         spotId: 3,
-        url: "https://a0.muscache.com/im/pictures/e6e813a4-17c5-4c5c-a8a9-aece28336fce.jpg",
+        url: "https://a0.muscache.com/im/pictures/hosting/Hosting-1203970905754828183/original/55770e2d-a4a1-4998-9bbe-8567016199ea.jpeg",
         preview: false,
       },
       {
         spotId: 3,
-        url: "https://a0.muscache.com/im/pictures/miso/Hosting-662933119240825735/original/6edfeef8-5b0d-442f-a7b3-ede4a407994d.jpeg",
+        url: "https://a0.muscache.com/im/pictures/hosting/Hosting-1203970905754828183/original/5666b558-b7c7-439c-a633-eecd997a5617.jpeg",
         preview: false,
       },
 
@@ -192,27 +192,27 @@ module.exports = {
 
       {
         spotId: 8,
-        url: "https://a0.muscache.com/im/pictures/3512590a-01b4-4795-9d6b-70f35b44cdb1.jpg",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/a0239672-a384-439d-be7e-3727bd170291.jpeg?im_w=960",
         preview: true,
       },
       {
         spotId: 8,
-        url: "https://a0.muscache.com/im/pictures/hosting/Hosting-686402035876821572/original/a84a00c8-3b07-48b9-841b-9b0093e72bda.jpeg",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/7bdd4965-8c62-4249-837f-cd1d12442508.jpeg",
         preview: false,
       },
       {
         spotId: 8,
-        url: "https://a0.muscache.com/im/pictures/hosting/Hosting-686402035876821572/original/78b7affc-d1d6-471d-a7f4-12acb3067a61.jpeg",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/8782b06c-fb10-4047-9537-dfd3e78cae48.jpeg",
         preview: false,
       },
       {
         spotId: 8,
-        url: "https://a0.muscache.com/im/pictures/eda68b9a-6de0-4733-af78-fdf654bc720f.jpg",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/9b3649d9-6cbb-42ee-bb52-72a1d362511e.jpeg",
         preview: false,
       },
       {
         spotId: 8,
-        url: "https://a0.muscache.com/im/pictures/miso/Hosting-686402035876821572/original/497bf287-d735-4195-bae1-aa12c08aa102.jpeg",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/4d50a646-5fd7-48d8-a0dc-6efdde453a7b.jpeg",
         preview: false,
       },
 
