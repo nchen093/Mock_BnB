@@ -106,6 +106,11 @@ module.exports = {
         url: "https://a0.muscache.com/im/pictures/miso/Hosting-1066671149345730403/original/af310be3-ec20-4324-b990-351181b68249.jpeg",
         preview: false,
       },
+      {
+        spotId: 4,
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-1066671149345730403/original/283da790-ebe6-4ada-b507-d851dab797f3.jpeg",
+        preview: false,
+      },
 
       {
         spotId: 5,
