@@ -43,7 +43,7 @@ module.exports = {
       },
 
       {
-        ownerId: 3,
+        ownerId: 1,
         address: "54234 Disney Land",
         city: "La Fortuna",
         state: "Alajuela",
@@ -59,7 +59,7 @@ module.exports = {
       },
 
       {
-        ownerId: 4,
+        ownerId: 2,
         address: "123 Sunset Blvd",
         city: "Los Angeles",
         state: "California",
@@ -74,7 +74,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/miso/Hosting-1066671149345730403/original/a6794fec-63a6-4017-9ef8-31cf0d447982.jpeg",
       },
       {
-        ownerId: 5,
+        ownerId: 3,
         address: "789 Ocean Drive",
         city: "Miami Beach",
         state: "Alajuela",
@@ -89,7 +89,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/3b2bd014-6f59-4b14-bbba-e06acab2f67e.jpg",
       },
       {
-        ownerId: 6,
+        ownerId: 1,
         address: "456 Mountain Peak Road",
         city: "Aspen",
         state: "Colorado",
@@ -104,7 +104,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/miso/Hosting-34512345/original/e1877938-06f0-452f-bab7-58f760e14495.jpeg",
       },
       {
-        ownerId: 7,
+        ownerId: 2,
         address: "101 Seaside Street",
         city: "Barcelona",
         state: "Alajuela",
@@ -119,7 +119,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/cd6274d1-9cae-43db-bee1-54e9dade89a6.jpg",
       },
       {
-        ownerId: 8,
+        ownerId: 3,
         address: "852 Forest Edge",
         city: "Vancouver",
         state: "British Columbia",
@@ -134,7 +134,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/miso/Hosting-710813179854029999/original/a0239672-a384-439d-be7e-3727bd170291.jpeg?im_w=960",
       },
       {
-        ownerId: 9,
+        ownerId: 1,
         address: "100 Royal Plaza",
         city: "London",
         state: "England",
@@ -149,7 +149,7 @@ module.exports = {
           "https://a0.muscache.com/im/pictures/miso/Hosting-1005823459945172808/original/1b4536b1-673c-43e9-b92d-9166740bf90a.jpeg",
       },
       {
-        ownerId: 10,
+        ownerId: 3,
         address: "303 Alpine Ridge",
         city: "Zurich",
         state: "Zurich",
