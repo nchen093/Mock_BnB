@@ -7,7 +7,7 @@ import SignupFormModal from "../Modals/SignupFormModal/SignupFormModal";
 import { AiOutlineMenu } from "react-icons/ai";
 import { CiLogout } from "react-icons/ci";
 import { FaUserCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -60,6 +60,11 @@ function ProfileButton({ user }) {
                 <li>Hello, {user.firstName}🎄</li>
                 <li> {user.username}</li>
                 <li>{user.email}</li>
+                <li>
+                  <Link to={`/user/spots`} style={{ textDecoration: "none" }}>
+                    Manage Spots
+                  </Link>
+                </li>
                 <li>
                   <button
                     style={{

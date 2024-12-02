@@ -43,30 +43,51 @@
   gap: 10px;
 }
 
-.leftsideDetails {
+.reserveContainer {
+  display: flex;
+  justify-content: flex-start;
+  height: 100%;
+  border: 1px solid #ccc;
+  background-color: transparent;
+  border-radius: 12px;
+  position: relative;
+  padding: 5px 40px;
+}
+
+.starRating {
   display: flex;
   justify-content: flex-end;
-  align-items: flex-start;
-  width: 100%;
+  margin-left: auto;
 }
 
-.reserveDetails {
+.dot {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.numReview {
   display: flex;
   flex-direction: column;
-  padding: 20px 30px;
-  background-color: transparent;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  flex-shrink: 0;
-  width: 300px;
+  justify-content: space-between;
+  gap: 4px;
+  margin-left: 10px;
 }
 
-.reserveDetails button {
-  margin-top: 5px;
+.numReview div {
+  visibility: hidden;
+}
+
+.reserveBtn {
+  margin-top: 60px;
+  margin-left: 30px;
   color: white;
   background-color: red;
-  padding: 10px 50px;
+  padding: 10px 100px;
   cursor: pointer;
+  position: absolute;
 }
 
 .spotDetailsLine {

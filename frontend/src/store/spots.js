@@ -43,7 +43,7 @@ export const postSpot = (newSpot, url) => async (dispatch) => {
 //   return await res.json();
 // };
 
-// // DELTE a spot
+// DELTE a spot
 // export const deleteSpot = (spotId) => async () => {
 //   const res = await csrfFetch(`/api/spots/${spotId}`, {
 //     method: "DELETE",
@@ -67,16 +67,6 @@ export const postSpot = (newSpot, url) => async (dispatch) => {
 //         spots[spot.id] = spot;
 //         return spots;
 //       }, {});
-//     // case "CREATE_SPOT":
-//     //   return {
-//     //     ...state,
-//     //     [action.payload.id]: action.payload,
-//     //   };
-
-//     default:
-//       return state;
-//   }
-// }
 
 const initialState = {};
 

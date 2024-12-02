@@ -13,10 +13,15 @@ export default function SpotInfo({ spot }) {
               {spot.city}, {spot.state}
             </strong>
           </div>
-          {spot.avgRating && (
+
+          {spot.avgRating ? (
             <div className="spotGridItemStarRating">
               <GoStarFill style={{ color: "#ffd60a" }} />
               {spot.avgRating.toFixed(1)}
+            </div>
+          ) : (
+            <div className="spotGridItemStarRating">
+              <GoStarFill style={{ color: "#ffd60a" }} /> New
             </div>
           )}
         </div>

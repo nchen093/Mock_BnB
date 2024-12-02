@@ -10,12 +10,12 @@ function CreateSpot() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [lat, setLat] = useState(undefined);
-  const [lng, setLng] = useState(undefined);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
   const [nonPreviewImageUrl, setNonPreviewImageUrl] = useState("");
 
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ function CreateSpot() {
     lng: false,
     name: false,
     price: false,
-    previewImageUrl: false,
     description: false,
+    previewImage: false,
     nonPreviewImageUrl: false,
   });
 
@@ -47,7 +47,7 @@ function CreateSpot() {
       errors.description = "Description needs a minimum of 30 characters";
     if (!name) errors.name = "Name is required";
     if (!price) errors.price = "Price is required";
-    if (!previewImageUrl) errors.previewImageUrl = "Preview image is required";
+    if (!previewImage) errors.previewImage = "Preview image is required";
     if (!/\.(png|jpg|jpeg)$/i.test(nonPreviewImageUrl))
       errors.nonPreviewImageUrl = "Image URL must end in .png .jpg, or .jpeg";
     setErrors(errors);
@@ -58,7 +58,7 @@ function CreateSpot() {
     description,
     name,
     price,
-    previewImageUrl,
+    previewImage,
     nonPreviewImageUrl,
   ]);
 
@@ -77,8 +77,8 @@ function CreateSpot() {
       lng: true,
       name: true,
       price: true,
-      previewImageUrl: true,
       description: true,
+      previewImage: true,
       nonPreviewImageUrl: true,
     });
 
@@ -90,16 +90,17 @@ function CreateSpot() {
       state,
       name,
       description,
-      price,
+      price: parseFloat(price),
       lat,
       lng,
+      previewImage,
     };
 
-    // console(body);
-
     try {
-      const createdSpot = await dispatch(postSpot(body, previewImageUrl));
+      const createdSpot = await dispatch(postSpot(body, previewImage));
+      console.log("Created spot response:", createdSpot);
       if (createdSpot) {
+        navigate("/");
         navigate(`/spots/${createdSpot.id}`);
       }
     } catch (error) {
@@ -194,6 +195,7 @@ function CreateSpot() {
             fast wifi or parking, and what you love about the neighborhood.
           </p>
           <textarea
+            style={{ height: "125px", width: "100%" }}
             value={description}
             onBlur={() => handleMessages("description")}
             placeholder="Please write at least 30 characters"
@@ -241,14 +243,14 @@ function CreateSpot() {
           <p>Submit a link to at least one photo to publish your spot.</p>
           <input
             type="url"
-            value={previewImageUrl}
-            onBlur={() => handleMessages("previewImageUrl")}
+            value={previewImage}
+            onBlur={() => handleMessages("previewImage")}
             placeholder="Preview Image URL"
-            onChange={(e) => setPreviewImageUrl(e.target.value)}
+            onChange={(e) => setPreviewImage(e.target.value)}
             required
           />
-          {errors.previewImageUrl && touched.previewImageUrl && (
-            <p>{errors.previewImageUrl}</p>
+          {errors.previewImage && touched.previewImage && (
+            <p>{errors.previewImage}</p>
           )}
           <input
             type="url"
@@ -260,36 +262,7 @@ function CreateSpot() {
           {errors.nonPreviewImageUrl && touched.nonPreviewImageUrl && (
             <p>{errors.nonPreviewImageUrl}</p>
           )}
-          <input
-            type="url"
-            value={nonPreviewImageUrl}
-            onBlur={() => handleMessages("nonPreviewImageUrl")}
-            placeholder="Image URL"
-            onChange={(e) => setNonPreviewImageUrl(e.target.value)}
-          />
-          {errors.nonPreviewImageUrl && touched.nonPreviewImageUrl && (
-            <p>{errors.nonPreviewImageUrl}</p>
-          )}
-          <input
-            type="url"
-            value={nonPreviewImageUrl}
-            onBlur={() => handleMessages("nonPreviewImageUrl")}
-            placeholder="Image URL"
-            onChange={(e) => setNonPreviewImageUrl(e.target.value)}
-          />
-          {errors.nonPreviewImageUrl && touched.nonPreviewImageUrl && (
-            <p>{errors.nonPreviewImageUrl}</p>
-          )}
-          <input
-            type="url"
-            value={nonPreviewImageUrl}
-            onBlur={() => handleMessages("nonPreviewImageUrl")}
-            placeholder="Image URL"
-            onChange={(e) => setNonPreviewImageUrl(e.target.value)}
-          />
-          {errors.nonPreviewImageUrl && touched.nonPreviewImageUrl && (
-            <p>{errors.nonPreviewImageUrl}</p>
-          )}
+
           <div className="line"></div>
           <button type="submit">Create Spot</button>
         </form>

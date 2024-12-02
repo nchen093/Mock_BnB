@@ -2,16 +2,16 @@ import { useParams } from "react-router-dom";
 import { getSpotDetail } from "../../store/spotDetails";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { GoStarFill } from "react-icons/go";
 import "./SpotDetail.css";
 
 export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  // Accessing the spot details from the store
   const spotDetails = useSelector((state) => state.spotDetails);
 
-  // Fetching spot details when the component mounts or spotId changes
+  // Fetching spot details
   useEffect(() => {
     dispatch(getSpotDetail(spotId));
   }, [dispatch, spotId]);
@@ -72,14 +72,35 @@ export default function SpotDetail() {
               <p>{spotDetails.description}</p>
             </div>
 
-            <div className="leftsideDetails">
-              <div className="reserveDetails">
-                <strong>${spotDetails.price} night</strong>
-                <button onClick={reserve}>Reserve</button>
+            <div className="reserveContainer">
+              <div>
+                <strong className="spot-night">
+                  ${spotDetails.price} night
+                </strong>
               </div>
+
+              {spotDetails.avgStarRating ? (
+                <div className="starRating">
+                  <GoStarFill style={{ color: "#ffd60a" }} />
+                  {spotDetails.avgStarRating.toFixed(1)}
+                </div>
+              ) : (
+                <div className="starRating">
+                  <GoStarFill style={{ color: "#ffd60a" }} /> New
+                </div>
+              )}
+
+              <div className="dot">.</div>
+              <strong className="numReview">
+                {spotDetails.numReviews.length > 1
+                  ? `${spotDetails.numReviews} Reviews`
+                  : `${spotDetails.numReviews} Review`}
+              </strong>
+              <button className="reserveBtn" onClick={reserve}>
+                Reserve
+              </button>
             </div>
           </div>
-
           <div className="spotDetailsLine"></div>
         </div>
       </div>
