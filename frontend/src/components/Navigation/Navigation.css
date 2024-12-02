@@ -1,0 +1,73 @@
+.hidden {
+  display: none;
+}
+#nav-bar {
+  display: flex;
+  padding: 0px 20px;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: xx-large;
+  color: #74c0fc;
+  text-decoration: none;
+}
+
+.rightHeader {
+  display: flex;
+  margin-left: auto;
+}
+
+.createSpot {
+  display: flex;
+  align-items: flex-end;
+  font-weight: bold;
+  font-size: medium;
+  color: #74c0fc;
+  text-decoration: none;
+  margin-left: auto;
+  padding: 10px;
+}
+
+.profilebtn {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  border-radius: 9999px;
+  padding: 10px;
+  font-size: 21px;
+  border: 1px solid rgb(173, 167, 167);
+  background-color: white;
+  transition: box-shadow 0.2s ease;
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  list-style-type: none;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.75rem;
+  width: 150px;
+  z-index: 10;
+  transform: translateX(-150px) translateY(45px);
+  background-color: white;
+}
+
+.navBar-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgb(197, 189, 189);
+}
+
+.dropdown li:hover {
+  color: #74c0fc;
+}

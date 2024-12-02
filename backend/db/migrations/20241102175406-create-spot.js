@@ -38,11 +38,9 @@ module.exports = {
         },
         lat: {
           type: Sequelize.DECIMAL,
-          allowNull: false,
         },
         lng: {
           type: Sequelize.DECIMAL,
-          allowNull: false,
         },
         name: {
           type: Sequelize.STRING(256),
@@ -58,7 +56,9 @@ module.exports = {
         },
         previewImage: {
           type: Sequelize.STRING,
+          allowNull: false,
         },
+
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,

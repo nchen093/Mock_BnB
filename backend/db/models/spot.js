@@ -61,11 +61,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       lat: {
         type: DataTypes.FLOAT,
-        allowNull: false,
       },
       lng: {
         type: DataTypes.FLOAT,
-        allowNull: false,
       },
       name: {
         type: DataTypes.STRING,
@@ -87,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       previewImage: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

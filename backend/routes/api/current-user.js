@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use("/bookings", bookingsRouter);
 
+//get all spots by current user
 router.get("/spots", async (req, res) => {
   const { user } = req;
   if (!user) {
