@@ -39,9 +39,9 @@ app.use(
     },
   })
 );
-app.get("/", (req, res) => {
-  res.json({ message: "Hello from the backend!" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "Hello from the backend!" });
+// });
 app.use(routes);
 
 app.use((_req, _res, next) => {
