@@ -100,7 +100,7 @@ function CreateSpot() {
       const createdSpot = await dispatch(postSpot(body, previewImage));
       console.log("Created spot response:", createdSpot);
       if (createdSpot) {
-        navigate("/");
+        navigate("/HomePage");
         navigate(`/spots/${createdSpot.id}`);
       }
     } catch (error) {
