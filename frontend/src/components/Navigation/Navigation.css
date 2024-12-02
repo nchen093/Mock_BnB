@@ -1,68 +1,73 @@
 .hidden {
   display: none;
 }
-
-ul {
-  list-style-type: none;
-  top: 10px;
-  left: 10px;
-  cursor: pointer;
-  background-color: transparent;
-}
-
-.nav-bar {
+#nav-bar {
   display: flex;
-  padding: 0px;
+  padding: 0px 20px;
   justify-content: space-between;
-  list-style-type: none;
-  border-bottom: 1px rgb(228, 219, 219) solid;
+  align-items: center;
   height: 70px;
 }
 
-.nav-bar a {
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: xx-large;
   color: #74c0fc;
   text-decoration: none;
-  font-size: x-large;
+}
+
+.rightHeader {
+  display: flex;
+  margin-left: auto;
+}
+
+.createSpot {
+  display: flex;
+  align-items: flex-end;
   font-weight: bold;
-  display: flex;
-  align-items: center;
+  font-size: medium;
+  color: #74c0fc;
+  text-decoration: none;
+  margin-left: auto;
+  padding: 10px;
 }
 
-.userIcon {
-  float: right;
-  padding: 0px;
-}
-
-.btnbox {
+.profilebtn {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
   border-radius: 9999px;
   padding: 10px;
-  font-size: 25px;
+  font-size: 21px;
   border: 1px solid rgb(173, 167, 167);
   background-color: white;
   transition: box-shadow 0.2s ease;
-}
-
-.dropdown {
   position: relative;
 }
 
-.menu-item {
-  /* position: absolute; */
+.dropdown {
+  position: absolute;
   list-style-type: none;
-  top: calc(100% + 0.25rem);
-  right: 0px;
-  width: 80px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
   padding: 0.75rem;
-  border-radius: 0.25rem;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  width: 150px;
+  z-index: 10;
+  transform: translateX(-150px) translateY(45px);
   background-color: white;
-  overflow: hidden;
 }
 
-.btnbox:hover {
-  box-shadow: 5px 5px 5px rgb(192, 189, 189);
-  cursor: pointer;
+.navBar-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgb(197, 189, 189);
+}
+
+.dropdown li:hover {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
