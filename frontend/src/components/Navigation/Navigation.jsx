@@ -10,7 +10,7 @@ function Navigation({ isLoaded }) {
   return (
     <>
       <div id="nav-bar">
-        <NavLink className="logo" to="/HomePage">
+        <NavLink className="logo" to="/">
           <FaAirbnb style={{ color: "#74C0FC" }} size={40} />
           mockbnb
         </NavLink>
