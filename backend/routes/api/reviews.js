@@ -53,6 +53,7 @@ router.delete("/:reviewId/images/:imageId", async (req, res) => {
   }
 });
 
+// create a review
 router.post("/:reviewId/images", validateImage, async (req, res) => {
   const { user } = req;
   const { reviewId } = req.params;
@@ -114,6 +115,7 @@ router.put("/:reviewId", validateReview, async (req, res) => {
   }
 });
 
+// delete review
 router.delete("/:reviewId", async (req, res) => {
   const { user } = req;
   const { reviewId } = req.params;
@@ -140,6 +142,7 @@ router.delete("/:reviewId", async (req, res) => {
   }
 });
 
+// get all reviews base on userId
 router.get("/", async (req, res) => {
   const { user } = req;
   try {
