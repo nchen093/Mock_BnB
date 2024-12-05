@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOneSpot } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GoStarFill } from "react-icons/go";
 import "./SpotDetail.css";
 
@@ -9,18 +10,15 @@ export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  const spotInfoDetail = useSelector((state) => state.spots[spotId]);
+  const spots = useSelector((state) => state.spots);
+  const spotInfoDetail = spots[spotId];
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    dispatch(getOneSpot(spotId));
-  }, [dispatch, spotId]);
+  console.log(spotInfoDetail);
 
   useEffect(() => {
-    if (spotInfoDetail) {
-      setIsLoading(false);
-    }
-  }, [spotInfoDetail]);
+    dispatch(getOneSpot(spotId)).then(() => setIsLoading(false));
+  }, [dispatch, spotId]);
 
   const handleReserve = (e) => {
     e.preventDefault();
@@ -31,52 +29,53 @@ export default function SpotDetail() {
     return <div>Loading...</div>;
   }
 
-  const previewImageUrl = spotInfoDetail.SpotImages?.find(
-    (image) => image.preview
-  )?.url;
+  const previewImage = spotInfoDetail.SpotImages?.find((image) => image.url);
   const nonPreviewImages = spotInfoDetail.SpotImages?.filter(
-    (image) => !image.preview
+    (image) => !image.url
   );
 
   return (
     <>
       <div id="mainContainer">
         <div id="spotDetail">
-          <h1>{spotInfoDetail.name}</h1>
+          <h1>{spotInfoDetail?.name}</h1>
           <h3>
-            {spotInfoDetail.city}, {spotInfoDetail.state},{" "}
-            {spotInfoDetail.country}
+            {spotInfoDetail?.city}, {spotInfoDetail?.state},{" "}
+            {spotInfoDetail?.country}
           </h3>
           <div className="spotImages">
-            {previewImageUrl && (
+            {previewImage && (
               <img
                 className="spotImagesLeftRow"
-                src={previewImageUrl}
+                src={previewImage}
                 alt={spotInfoDetail.description}
               />
             )}
             {nonPreviewImages && (
               <div className="spotImagesRightRow">
+                {nonPreviewImages.map((image) => (
+                  <img key={image.id} src={image.url} alt="Non-preview image" />
+                ))}
                 <img src={nonPreviewImages} alt="Non-preview image" />
               </div>
             )}
 
             <div className="hostDetails">
               <h3>
-                Hosted by {spotInfoDetail.Owner?.firstName}
-                {spotInfoDetail.Owner?.lastName}
+                Hosted by {spotInfoDetail?.firstName}
+                {spotInfoDetail?.lastName}
               </h3>
-              <p>{spotInfoDetail.description}</p>
+              <p>{spotInfoDetail?.description}</p>
             </div>
 
             <div className="reserveContainer">
               <div>
                 <strong className="spot-night">
-                  ${spotInfoDetail.price} night
+                  ${spotInfoDetail?.price} night
                 </strong>
               </div>
 
-              {spotInfoDetail.avgStarRating ? (
+              {spotInfoDetail?.avgStarRating ? (
                 <div className="starRating">
                   <GoStarFill style={{ color: "#ffd60a" }} />
                   {spotInfoDetail.avgStarRating.toFixed(1)}
@@ -89,9 +88,9 @@ export default function SpotDetail() {
 
               <div className="dot">.</div>
               <strong className="numReview">
-                {(spotInfoDetail.numReviews?.length || 0) > 1
-                  ? `${spotInfoDetail.numReviews?.length} Reviews`
-                  : `${spotInfoDetail.numReviews?.length} Review`}
+                {(spotInfoDetail?.numReviews?.length || 0) > 1
+                  ? `${spotInfoDetail?.numReviews?.length} Reviews`
+                  : `${spotInfoDetail?.numReviews?.length} Review`}
               </strong>
               <button className="reserveBtn" onClick={handleReserve}>
                 Reserve

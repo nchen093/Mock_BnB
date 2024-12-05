@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation";
 import * as sessionActions from "./store/session";
 import ListOfSpots from "./components/LandingPage/ListOfSpots";
-// import SpotDetail from "./components/SpotDetailsPage/SpotDetail";
+import SpotDetail from "./components/SpotDetailsPage/SpotDetail";
 import CreateSpotForm from "./components/LoadSpotPage/CreateSpotForm";
 import EditSpotForm from "./components/LoadSpotPage/EditSpotForm";
 import ManageSpot from "./components/LoadSpotPage/ManageSpot";
@@ -34,10 +34,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <ListOfSpots />,
       },
-      // {
-      //   path: "/spots/:spotId",
-      //   element: <SpotDetail />,
-      // },
+      {
+        path: "/spots/:spotId",
+        element: <SpotDetail />,
+      },
       {
         path: "/spots/new",
         element: <CreateSpotForm />,
