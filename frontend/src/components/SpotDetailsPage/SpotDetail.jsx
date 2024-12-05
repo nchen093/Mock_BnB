@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import { getSpotDetail } from "../../store/spots";
+import { getOneSpot } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GoStarFill } from "react-icons/go";
 import "./SpotDetail.css";
 
@@ -9,32 +9,32 @@ export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  const spotDetails = useSelector((state) => state.spots);
+  const spotInfoDetail = useSelector((state) => state.spots[spotId]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetching spot details
   useEffect(() => {
-    dispatch(getSpotDetail(spotId));
+    dispatch(getOneSpot(spotId));
   }, [dispatch, spotId]);
 
-  //If spot details are not found
-  if (!spotDetails?.id) {
-    return (
-      <>
-        <h1>{!Number(spotId) ? "Spot" : "Resource"} not found</h1>
-      </>
-    );
-  }
+  useEffect(() => {
+    if (spotInfoDetail) {
+      setIsLoading(false);
+    }
+  }, [spotInfoDetail]);
 
-  const reserve = (e) => {
+  const handleReserve = (e) => {
     e.preventDefault();
-    alert("Feature Coming Soom...");
+    alert("Feature Coming Soon...");
   };
 
-  // Extracting the preview image and other images
-  const previewImageUrl = spotDetails.SpotImages?.find(
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const previewImageUrl = spotInfoDetail.SpotImages?.find(
     (image) => image.preview
   )?.url;
-  const nonPreviewImages = spotDetails.SpotImages.filter(
+  const nonPreviewImages = spotInfoDetail.SpotImages?.filter(
     (image) => !image.preview
   );
 
@@ -42,47 +42,44 @@ export default function SpotDetail() {
     <>
       <div id="mainContainer">
         <div id="spotDetail">
-          <h1>{spotDetails.name}</h1>
+          <h1>{spotInfoDetail.name}</h1>
           <h3>
-            {spotDetails.city}, {spotDetails.state}, {spotDetails.country}
+            {spotInfoDetail.city}, {spotInfoDetail.state},{" "}
+            {spotInfoDetail.country}
           </h3>
           <div className="spotImages">
             {previewImageUrl && (
               <img
                 className="spotImagesLeftRow"
                 src={previewImageUrl}
-                alt={spotDetails.description}
+                alt={spotInfoDetail.description}
               />
             )}
-            <div className="spotImagesRightRow">
-              {nonPreviewImages.slice(0, 5).map((image, i) => (
-                <img
-                  src={image.url}
-                  alt={`Image ${i + 1} of the spot`}
-                  key={i}
-                />
-              ))}
-            </div>
+            {nonPreviewImages && (
+              <div className="spotImagesRightRow">
+                <img src={nonPreviewImages} alt="Non-preview image" />
+              </div>
+            )}
 
             <div className="hostDetails">
               <h3>
-                Hosted by {spotDetails.Owner?.firstName}{" "}
-                {spotDetails.Owner?.lastName}
+                Hosted by {spotInfoDetail.Owner?.firstName}
+                {spotInfoDetail.Owner?.lastName}
               </h3>
-              <p>{spotDetails.description}</p>
+              <p>{spotInfoDetail.description}</p>
             </div>
 
             <div className="reserveContainer">
               <div>
                 <strong className="spot-night">
-                  ${spotDetails.price} night
+                  ${spotInfoDetail.price} night
                 </strong>
               </div>
 
-              {spotDetails.avgStarRating ? (
+              {spotInfoDetail.avgStarRating ? (
                 <div className="starRating">
                   <GoStarFill style={{ color: "#ffd60a" }} />
-                  {spotDetails.avgStarRating.toFixed(1)}
+                  {spotInfoDetail.avgStarRating.toFixed(1)}
                 </div>
               ) : (
                 <div className="starRating">
@@ -92,11 +89,11 @@ export default function SpotDetail() {
 
               <div className="dot">.</div>
               <strong className="numReview">
-                {spotDetails.numReviews.length > 1
-                  ? `${spotDetails.numReviews} Reviews`
-                  : `${spotDetails.numReviews} Review`}
+                {(spotInfoDetail.numReviews?.length || 0) > 1
+                  ? `${spotInfoDetail.numReviews?.length} Reviews`
+                  : `${spotInfoDetail.numReviews?.length} Review`}
               </strong>
-              <button className="reserveBtn" onClick={reserve}>
+              <button className="reserveBtn" onClick={handleReserve}>
                 Reserve
               </button>
             </div>

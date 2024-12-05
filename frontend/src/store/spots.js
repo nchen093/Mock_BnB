@@ -17,17 +17,24 @@ const loadSpots = (spots) => {
   };
 };
 
-const loadOneSpotDetail = (data) => {
+const loadOneSpotDetail = (spot) => {
   return {
     type: GET_SPOT_DETAILS,
-    payload: data,
+    payload: spot,
   };
 };
 
-const createSpot = (data) => {
+const createSpot = (spot) => {
   return {
     type: CREATE_SPOT,
-    payload: data,
+    payload: spot,
+  };
+};
+
+const updateSpot = (spot) => {
+  return {
+    type: UPDATE_SPOT,
+    payload: spot,
   };
 };
 
@@ -38,14 +45,7 @@ const createImage = (data) => {
   };
 };
 
-const updateSpot = (data) => {
-  return {
-    type: UPDATE_SPOT,
-    payload: data,
-  };
-};
-
-const removedSpot = (spotId) => {
+const removeSpot = (spotId) => {
   return {
     type: DELETE_SPOT,
     payload: spotId,
@@ -55,7 +55,6 @@ const removedSpot = (spotId) => {
 //Thunk
 export const getAllSpot = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
-
   const data = await res.json();
   const spots = data.Spots;
   dispatch(loadSpots(spots));
@@ -79,7 +78,7 @@ export const userSpots = () => async (dispatch) => {
 };
 
 //Access the spot detail by spotId
-export const getSpotDetail = (spotId) => async (dispatch) => {
+export const getOneSpot = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
 
   if (res.ok) {
@@ -110,6 +109,24 @@ export const postSpot = (body) => async (dispatch) => {
   }
 };
 
+// Edit a spot
+export const putSpot = (spot) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spot.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(spot),
+  });
+
+  if (res.ok) {
+    const updatedSpot = await res.json();
+    dispatch(updateSpot(updatedSpot));
+    return updatedSpot;
+  } else {
+    const error = await res.json();
+    return error;
+  }
+};
+
 // Add Images base on spotId
 export const postImage = (imageData) => async (dispatch) => {
   const { spotId, url, preview } = imageData;
@@ -129,24 +146,6 @@ export const postImage = (imageData) => async (dispatch) => {
   }
 };
 
-// Edit a spot
-export const putSpot = (spot) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spot.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(spot),
-  });
-
-  if (res.ok) {
-    const updatedSpot = await res.json();
-    dispatch(updateSpot(updatedSpot));
-    return updatedSpot;
-  } else {
-    const error = await res.json();
-    return error;
-  }
-};
-
 // DELETE A SPOT
 export const deletedSpot = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
@@ -154,14 +153,14 @@ export const deletedSpot = (spotId) => async (dispatch) => {
   });
 
   if (res.ok) {
-    dispatch(removedSpot(spotId));
+    dispatch(removeSpot(spotId));
   } else {
     const error = await res.json();
     return error;
   }
 };
 
-// export const deleteSpotDetails = () => ({ type: DELETE_SPOT_DETAILS });
+export const deleteSpotDetails = () => ({ type: DELETE_SPOT_DETAILS });
 
 const initialState = {};
 
@@ -175,11 +174,11 @@ export default function spotsReducer(state = initialState, action) {
       }, {});
 
     case GET_SPOT_DETAILS:
-      newState[action.payload.id] = action.payload;
+      newState[action.payload.id] = action.spot;
       return newState;
 
     case CREATE_SPOT:
-      newState[action.spot.id] = action.spot;
+      newState[action.payload.id] = action.spot;
       return newState;
 
     case UPDATE_SPOT:

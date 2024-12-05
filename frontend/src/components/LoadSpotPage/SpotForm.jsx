@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { postSpot, putSpot } from "../../store/spots";
+import { useNavigate } from "react-router-dom";
+import { putSpot, postSpot, postImage } from "../../store/spots";
 import "./SpotForm.css";
 
 const SpotForm = ({ spot, formType }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
-  const [name, setName] = useState("");
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
   const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  // error message
+  const [image2, setImage2] = useState("");
+  const [image3, setImage3] = useState("");
+  const [image4, setImage4] = useState("");
+  const [image5, setImage5] = useState("");
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -30,28 +31,32 @@ const SpotForm = ({ spot, formType }) => {
       setState(spot.state || "");
       setLat(spot.lat || "");
       setLng(spot.lng || "");
-      setName(spot.name || "");
       setDescription(spot.description || "");
+      setName(spot.name || "");
       setPrice(spot.price || "");
       setPreviewImage(spot.previewImage || "");
+      setImage2(spot.image2 || "");
+      setImage3(spot.image3 || "");
+      setImage4(spot.image4 || "");
+      setImage5(spot.image5 || "");
     }
   }, [spot]);
 
   const validateForm = () => {
-    const errors = {};
-
-    if (!country) errors.country = "Country is required";
-    if (!address) errors.address = "Address is required";
-    if (!city) errors.city = "City is required";
-    if (!state) errors.city = "State is required";
-    if (description?.length < 30)
-      errors.description = "Description needs a minimum of 30 characters";
-    if (!name) errors.name = "Name is required";
-    if (!price) errors.price = "Price is required";
-    if (!previewImage) errors.previewImage = "Preview image is required";
-
-    return errors;
+    let error = {};
+    if (!country) error.country = "Country is required";
+    if (!address) error.address = "Address is required";
+    if (!city) error.city = "City is required";
+    if (!state) error.state = "State is required";
+    if (!description || description.length < 30)
+      error.description = "Description needs 30 or more characters";
+    if (!price) error.price = "Price is required";
+    if (!name) error.name = "Name is required";
+    if (formType === "Create a New Spot" && !previewImage)
+      error.previewurl = "Preview image is required.";
+    return error;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
@@ -59,6 +64,7 @@ const SpotForm = ({ spot, formType }) => {
       setErrors(formErrors);
       return;
     }
+
     setErrors({});
     const body = {
       ...spot,
@@ -68,19 +74,33 @@ const SpotForm = ({ spot, formType }) => {
       state,
       lat,
       lng,
-      name,
       description,
+      name,
       price: parseFloat(price),
-      previewImage,
     };
 
+    let newSpot;
     if (formType === "Update Your Spot") {
-      dispatch(putSpot(body));
-    } else {
-      dispatch(postSpot(body));
+      newSpot = await dispatch(putSpot(body));
+    } else if (formType === "Create a New Spot") {
+      newSpot = await dispatch(postSpot(body));
+      const listImages = [
+        { spotId: newSpot.id, preview: true, url: previewImage },
+        { spotId: newSpot.id, preview: false, url: image2 },
+        { spotId: newSpot.id, preview: false, url: image3 },
+        { spotId: newSpot.id, preview: false, url: image4 },
+        { spotId: newSpot.id, preview: false, url: image5 },
+      ];
+      await Promise.all(listImages.map((image) => dispatch(postImage(image))));
     }
-    navigate(`/spots/${spot.id}`);
+
+    if (newSpot.errors) {
+      setErrors(newSpot.errors);
+    } else {
+      navigate(`/spots/${newSpot.id}`);
+    }
   };
+
   return (
     <div className="mainContainer">
       <div className="createSpot-form">
