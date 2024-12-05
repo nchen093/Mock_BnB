@@ -45,6 +45,7 @@
   background-color: white;
   transition: box-shadow 0.2s ease;
   position: relative;
+  cursor: pointer;
 }
 
 .dropdown {
@@ -70,4 +71,33 @@
 
 .dropdown li:hover {
   color: #74c0fc;
+}
+
+@media (max-width: 500px) {
+  #nav-bar {
+    display: flex;
+    padding: 0px 5px;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: large;
+    color: #74c0fc;
+    text-decoration: none;
+  }
+
+  .profilebtn {
+    cursor: pointer;
+    border-radius: 20px;
+    margin: auto;
+  }
+
+  .dropdown li:hover {
+    color: #74c0fc;
+  }
 }

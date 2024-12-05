@@ -1,0 +1,12 @@
+.confirm-msg {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin: 30px;
+}
+
+.deletebtn {
+  background-color: red;
+  color: white;
+}

@@ -1,16 +1,17 @@
 import { useEffect } from "react";
-import { loadSpots } from "../../store/spots";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllSpot } from "../../store/spots";
 import SpotInfo from "./SpotInfo";
 import "./ListOfSpots.css";
 
-function ListOfSpots() {
+const ListOfSpots = () => {
   const dispatch = useDispatch();
-  const spots = useSelector((state) => Object.values(state.spots));
+  const spotData = useSelector((state) => state.spots);
+  const spots = Object.values(spotData);
 
   useEffect(() => {
-    dispatch(loadSpots());
+    dispatch(getAllSpot());
   }, [dispatch]);
 
   return (
@@ -30,6 +31,6 @@ function ListOfSpots() {
       </div>
     </>
   );
-}
+};
 
 export default ListOfSpots;

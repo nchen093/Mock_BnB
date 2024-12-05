@@ -40,7 +40,7 @@
   border-radius: 8px;
   z-index: 10;
   transition: visibility 0.3s, opacity 0.3s ease-in-out;
-  max-width: 80%;
+  max-width: 90%;
   text-align: center;
 }
 
@@ -61,4 +61,50 @@
 .spotGridItem:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+@media (max-width: 1200px) {
+  .spotGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  .spotGridItemStarRating {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 10px;
+  }
+
+  .spotGridInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+  }
+}
+@media (max-width: 1024px) {
+  .spotGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 30px;
+  }
+}
+@media (max-width: 768px) {
+  .spotGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px;
+  }
+}
+@media (max-width: 576px) {
+  .spotGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+    padding: 30px;
+  }
 }

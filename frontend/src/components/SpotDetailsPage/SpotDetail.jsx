@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getSpotDetail } from "../../store/spotDetails";
+import { getSpotDetail } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GoStarFill } from "react-icons/go";
@@ -9,7 +9,7 @@ export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  const spotDetails = useSelector((state) => state.spotDetails);
+  const spotDetails = useSelector((state) => state.spots);
 
   // Fetching spot details
   useEffect(() => {

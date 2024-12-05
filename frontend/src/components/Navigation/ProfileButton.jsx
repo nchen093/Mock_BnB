@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-import OpenModalMenuItem from "./OpenModalMenuItem";
+import OpenModalMenuItem from "../Modals/OpenModalMenuItem";
 import LoginFormModal from "../Modals/LoginFormModal/LoginFormModal";
 import SignupFormModal from "../Modals/SignupFormModal/SignupFormModal";
 import { AiOutlineMenu } from "react-icons/ai";
