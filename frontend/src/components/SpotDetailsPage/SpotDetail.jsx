@@ -10,8 +10,11 @@ export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  const spotInfoDetail = useSelector((state) => state.spots[spotId]);
+  const spotInfoDetail = useSelector((state) => state.spots);
+  // const spotInfoDetail = spots[spotId];
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log("spotDetails", spotInfoDetail);
 
   useEffect(() => {
     dispatch(getOneSpot(spotId)).then(() => setIsLoading(false));

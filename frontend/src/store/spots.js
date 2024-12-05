@@ -174,11 +174,11 @@ export default function spotsReducer(state = initialState, action) {
       }, {});
 
     case GET_SPOT_DETAILS:
-      newState[action.payload.id] = action.spot;
+      newState[action.payload.id] = action.payload;
       return newState;
 
     case CREATE_SPOT:
-      newState[action.payload.id] = action.spot;
+      newState[action.payload.id] = action.payload;
       return newState;
 
     case UPDATE_SPOT:
