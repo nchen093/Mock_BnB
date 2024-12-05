@@ -3,7 +3,7 @@ import { csrfFetch } from "./csrf";
 // Action Types
 const GET_SPOTS = "/spots/loadSpots";
 const GET_SPOT_DETAILS = "spots/getSpotDetails";
-const CREATE_SPOT = "/spots/createSpot";
+const POST_SPOT = "/spots/createSpot";
 const CREATE_IMAGE = "/spots/createImage";
 const UPDATE_SPOT = "/spots/updateSpot";
 const DELETE_SPOT = "/spots/deleteSpot";
@@ -23,22 +23,22 @@ const loadOneSpotDetail = (spot) => {
     payload: spot,
   };
 };
-
-const createSpot = (spot) => {
+// action
+const postSpot = (payload) => {
   return {
-    type: CREATE_SPOT,
-    payload: spot,
+    type: POST_SPOT,
+    payload,
   };
 };
 
-const updateSpot = (spot) => {
+const updatedSpot = (spot) => {
   return {
     type: UPDATE_SPOT,
     payload: spot,
   };
 };
 
-const createImage = (data) => {
+const createdImage = (data) => {
   return {
     type: CREATE_IMAGE,
     payload: data,
@@ -67,9 +67,9 @@ export const userSpots = () => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    console.log("Fetched spots:", data.Spots);
+    // console.log("Fetched spots:", data.Spots);
     const spots = data.Spots;
-    dispatch(loadSpots(spots));
+    dispatch(loadSpots(spots)); // communicate with redux
     return spots;
   } else {
     const error = await res.json();
@@ -92,16 +92,15 @@ export const getOneSpot = (spotId) => async (dispatch) => {
 };
 
 //CREATE A SPOT
-export const postSpot = (body) => async (dispatch) => {
+export const postSpotThunk = (spot) => async (dispatch) => {
   const res = await csrfFetch("/api/spots", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(spot),
   });
 
   if (res.ok) {
-    const newSpot = await res.json();
-    dispatch(createSpot(newSpot));
+    const newSpot = await res.json(); // Javascript can read
+    dispatch(postSpot(newSpot));
     return newSpot;
   } else {
     const error = await res.json();
@@ -110,17 +109,16 @@ export const postSpot = (body) => async (dispatch) => {
 };
 
 // Edit a spot
-export const putSpot = (spot) => async (dispatch) => {
+export const putSpotThunk = (spot) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spot.id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(spot),
   });
 
   if (res.ok) {
-    const updatedSpot = await res.json();
-    dispatch(updateSpot(updatedSpot));
-    return updatedSpot;
+    const editSpot = await res.json();
+    dispatch(updatedSpot(editSpot));
+    return editSpot;
   } else {
     const error = await res.json();
     return error;
@@ -128,17 +126,16 @@ export const putSpot = (spot) => async (dispatch) => {
 };
 
 // Add Images base on spotId
-export const postImage = (imageData) => async (dispatch) => {
-  const { spotId, url, preview } = imageData;
+export const postImageThunk = (image) => async (dispatch) => {
+  const { spotId, url, preview } = image;
   const res = await csrfFetch(`/api/spots/${spotId}/images`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url, preview }),
   });
 
   if (res.ok) {
     const newImage = await res.json();
-    dispatch(createImage(newImage));
+    dispatch(createdImage(newImage));
     return newImage;
   } else {
     const error = await res.json();
@@ -177,7 +174,7 @@ export default function spotsReducer(state = initialState, action) {
       newState[action.payload.id] = action.payload;
       return newState;
 
-    case CREATE_SPOT:
+    case POST_SPOT:
       newState[action.payload.id] = action.payload;
       return newState;
 

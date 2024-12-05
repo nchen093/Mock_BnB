@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { userSpots } from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -6,18 +6,29 @@ import UserSpotInfo from "./UserSpotInfo";
 
 export default function ManageSpot() {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // get user infon
   const currentUser = useSelector((state) => state.session.user);
+
+  // collect all spots data
   const spotsData = useSelector((state) => state.spots);
   const spots = Object.values(spotsData);
-  const currentUserSpot = spots.filter(
-    (spot) => spot?.ownerId === currentUser?.id
+
+  // select the user who owns the spot
+  const currentUserSpot = spots?.filter(
+    (spot) => spot.ownerId === currentUser.id
   );
 
   useEffect(() => {
-    if (currentUser?.id) {
-      dispatch(userSpots());
+    if (currentUser.id) {
+      dispatch(userSpots()).then(() => setIsLoading(false));
     }
   }, [dispatch, currentUser]);
+
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
 
   return (
     <>

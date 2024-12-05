@@ -15,8 +15,6 @@ export default function SpotDetail() {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log("spotDetails", spotInfoDetail);
-
   useEffect(() => {
     dispatch(getOneSpot(spotId)).then(() => setIsLoading(false));
   }, [dispatch, spotId]);

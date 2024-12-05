@@ -1,26 +1,28 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { putSpot, postSpot, postImage } from "../../store/spots";
+import { putSpotThunk, postSpotThunk, postImageThunk } from "../../store/spots";
 import "./SpotForm.css";
 
 const SpotForm = ({ spot, formType }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
+  const [lat, setLat] = useState(90);
+  const [lng, setLng] = useState(90);
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
-  const [image2, setImage2] = useState("");
-  const [image3, setImage3] = useState("");
-  const [image4, setImage4] = useState("");
-  const [image5, setImage5] = useState("");
+  const [nonPrviewImg1, setNonPrviewImg1] = useState("");
+  const [nonPrviewImg2, setNonPrviewImg2] = useState("");
+  const [nonPrviewImg3, setNonPrviewImg3] = useState("");
+  const [nonPrviewImg4, setNonPrviewImg4] = useState("");
+
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -35,15 +37,16 @@ const SpotForm = ({ spot, formType }) => {
       setName(spot.name || "");
       setPrice(spot.price || "");
       setPreviewImage(spot.previewImage || "");
-      setImage2(spot.image2 || "");
-      setImage3(spot.image3 || "");
-      setImage4(spot.image4 || "");
-      setImage5(spot.image5 || "");
+      setNonPrviewImg1(spot.nonPrviewImg1 || "");
+      setNonPrviewImg2(spot.nonPrviewImg2 || "");
+      setNonPrviewImg3(spot.nonPrviewImg3 || "");
+      setNonPrviewImg4(spot.nonPrviewImg4 || "");
     }
   }, [spot]);
 
   const validateForm = () => {
     let error = {};
+
     if (!country) error.country = "Country is required";
     if (!address) error.address = "Address is required";
     if (!city) error.city = "City is required";
@@ -66,38 +69,47 @@ const SpotForm = ({ spot, formType }) => {
     }
 
     setErrors({});
-    const body = {
+
+    // Pre-thunk
+    const newSpot = {
       ...spot,
       country,
       address,
       city,
       state,
-      lat,
-      lng,
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
       description,
       name,
       price: parseFloat(price),
+      previewImage,
     };
 
-    let newSpot;
+    console.log("what data am I sending to ", newSpot); // Log the data you're sending
+
+    let response;
     if (formType === "Update Your Spot") {
-      newSpot = await dispatch(putSpot(body));
+      response = await dispatch(putSpotThunk(newSpot));
+      console.log("what is my response :", response); // Check the response
     } else if (formType === "Create a New Spot") {
-      newSpot = await dispatch(postSpot(body));
+      response = await dispatch(postSpotThunk(newSpot));
+
       const listImages = [
-        { spotId: newSpot.id, preview: true, url: previewImage },
-        { spotId: newSpot.id, preview: false, url: image2 },
-        { spotId: newSpot.id, preview: false, url: image3 },
-        { spotId: newSpot.id, preview: false, url: image4 },
-        { spotId: newSpot.id, preview: false, url: image5 },
+        { spotId: response.id, preview: true, url: previewImage },
+        { spotId: response.id, preview: false, url: nonPrviewImg1 },
+        { spotId: response.id, preview: false, url: nonPrviewImg2 },
+        { spotId: response.id, preview: false, url: nonPrviewImg3 },
+        { spotId: response.id, preview: false, url: nonPrviewImg4 },
       ];
-      await Promise.all(listImages.map((image) => dispatch(postImage(image))));
+      await Promise.all(
+        listImages.map((image) => dispatch(postImageThunk(image)))
+      );
     }
 
     if (newSpot.errors) {
       setErrors(newSpot.errors);
     } else {
-      navigate(`/spots/${newSpot.id}`);
+      navigate(`/spots/${response.id}`);
     }
   };
 
@@ -116,9 +128,9 @@ const SpotForm = ({ spot, formType }) => {
               id="spot-country"
               type="text"
               value={country}
+              placeholder="Country"
               onChange={(e) => setCountry(e.target.value)}
               required
-              placeholder="Country"
             />
             {errors.country && <p>{errors.country}</p>}
           </div>
@@ -165,7 +177,6 @@ const SpotForm = ({ spot, formType }) => {
               placeholder="Latitude"
               onChange={(e) => setLat(e.target.value)}
             />
-            {errors.lat && <p>{errors.lat}</p>}
 
             <label>Longitude</label>
             <input
@@ -174,7 +185,6 @@ const SpotForm = ({ spot, formType }) => {
               placeholder="Longitude"
               onChange={(e) => setLng(e.target.value)}
             />
-            {errors.lng && <p>{errors.lng}</p>}
           </div>
           <div className="line"></div>
           <h2>Describe your place to guests</h2>
@@ -222,21 +232,71 @@ const SpotForm = ({ spot, formType }) => {
           />
           {errors.price && <p>{errors.price}</p>}
           <div className="line"></div>
+
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one photo to publish your spot.</p>
           <input
-            type="url"
+            name="previewImage"
             value={previewImage}
             placeholder="Preview Image URL"
             onChange={(e) => setPreviewImage(e.target.value)}
             required
           />
           {errors.previewImage && <p>{errors.previewImage}</p>}
-          <div className="line"></div>
-
-          <button className="createBtn" type="submit">
-            create spot
-          </button>
+          <input
+            id="nonPreviewImage1"
+            name="image1"
+            value={nonPrviewImg1}
+            placeholder="Image URL"
+            onChange={(e) => setNonPrviewImg1(e.target.value)}
+          />
+          {nonPrviewImg1 && (
+            <div className="image_preview">
+              <img src={nonPrviewImg1} alt="image" />
+            </div>
+          )}
+          <input
+            id="nonPrviewImg2"
+            name="nonPrviewImg2"
+            value={nonPrviewImg2}
+            placeholder="Image URL"
+            onChange={(e) => setNonPrviewImg2(e.target.value)}
+          />
+          {nonPrviewImg2 && (
+            <div className="image_preview">
+              <img src={nonPrviewImg2} alt="image" />
+            </div>
+          )}
+          <input
+            id="nonPrviewImg3"
+            name="inonPrviewImg3"
+            value={nonPrviewImg3}
+            placeholder="Image URL"
+            onChange={(e) => setNonPrviewImg3(e.target.value)}
+          />
+          {nonPrviewImg3 && (
+            <div className="image_preview">
+              <img src={nonPrviewImg3} alt="image" />
+            </div>
+          )}
+          <input
+            id="nonPrviewImg4"
+            name="nonPrviewImg4"
+            value={nonPrviewImg4}
+            placeholder="Image URL"
+            onChange={(e) => setNonPrviewImg4(e.target.value)}
+          />
+          <>
+            {nonPrviewImg4 && (
+              <div className="image_preview">
+                <img src={nonPrviewImg4} alt="image" />
+              </div>
+            )}
+            <div className="line"></div>
+            <button className="createBtn" type="submit">
+              create spot
+            </button>
+          </>
         </form>
       </div>
     </div>
