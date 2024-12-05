@@ -10,8 +10,9 @@ export default function SpotDetail() {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  const spotInfoDetail = useSelector((state) => state.spots);
-  // const spotInfoDetail = spots[spotId];
+  const spots = useSelector((state) => state.spots);
+  const spotInfoDetail = spots[spotId];
+
   const [isLoading, setIsLoading] = useState(true);
 
   console.log("spotDetails", spotInfoDetail);
@@ -29,9 +30,11 @@ export default function SpotDetail() {
     return <div>Loading...</div>;
   }
 
-  const previewImage = spotInfoDetail.SpotImages?.find((image) => image.url);
+  const previewImage = spotInfoDetail.SpotImages?.find(
+    (image) => image.preview
+  ).url;
   const nonPreviewImages = spotInfoDetail.SpotImages?.filter(
-    (image) => !image.url
+    (image) => !image.preview
   );
 
   return (
@@ -54,9 +57,8 @@ export default function SpotDetail() {
             {nonPreviewImages && (
               <div className="spotImagesRightRow">
                 {nonPreviewImages.map((image) => (
-                  <img key={image.id} src={image.url} alt="Non-preview image" />
+                  <img key={image.id} src={image.url} alt={image.name} />
                 ))}
-                <img src={nonPreviewImages} alt="Non-preview image" />
               </div>
             )}
 
@@ -89,8 +91,8 @@ export default function SpotDetail() {
               <div className="dot">.</div>
               <strong className="numReview">
                 {(spotInfoDetail?.numReviews?.length || 0) > 1
-                  ? `${spotInfoDetail?.numReviews?.length} Reviews`
-                  : `${spotInfoDetail?.numReviews?.length} Review`}
+                  ? `${spotInfoDetail?.numReviews} Reviews`
+                  : `${spotInfoDetail?.numReviews} Review`}
               </strong>
               <button className="reserveBtn" onClick={handleReserve}>
                 Reserve

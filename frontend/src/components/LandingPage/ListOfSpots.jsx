@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllSpot } from "../../store/spots";
+import { getAllSpots } from "../../store/spots";
 import SpotInfo from "./SpotInfo";
 import "./ListOfSpots.css";
 
@@ -11,7 +11,7 @@ const ListOfSpots = () => {
   const spots = Object.values(spotData).filter((spot) => spot !== undefined);
 
   useEffect(() => {
-    dispatch(getAllSpot());
+    dispatch(getAllSpots());
   }, [dispatch]);
 
   console.log(spotData);
