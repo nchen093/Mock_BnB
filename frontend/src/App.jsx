@@ -43,14 +43,14 @@ const router = createBrowserRouter([
         element: <CreateSpotForm />,
       },
       {
+        path: "/spots/:spotId/edit",
+        element: <EditSpotForm />,
+      },
+      {
         path: "/user/spots",
         element: <ManageSpot />,
       },
 
-      {
-        path: "/spots/:spotId/edit",
-        element: <EditSpotForm />,
-      },
       {
         path: "*",
         element: <h1>Page Not Found</h1>,

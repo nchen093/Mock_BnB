@@ -1,16 +1,16 @@
 import { GoStarFill } from "react-icons/go";
-import { deletedSpot } from "../../store/spots";
+import { deletedSpotThunk } from "../../store/spots";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import DeleteSpotModal from "../Modals/DeleteSpotModal/DeleteSpot";
+import DeleteSpotModal from "../Modals/DeleteSpotModal/DeleteSpotModal";
 
 export default function UserSpotInfo({ spot }) {
   const dispatch = useDispatch();
-  const { setModalContent, openModal, closeModal } = useModal();
+  const { setModalContent, closeModal } = useModal();
 
   const deleteSpot = () => {
-    dispatch(deletedSpot(spot.id));
+    dispatch(deletedSpotThunk(spot.id));
     closeModal();
   };
 
@@ -19,15 +19,13 @@ export default function UserSpotInfo({ spot }) {
     setModalContent(
       <DeleteSpotModal onDelete={deleteSpot} onClose={closeModal} type="Spot" />
     );
-    openModal();
   };
 
   return (
     <div className="spotGridItem">
-      <img src={spot.previewImage} alt={spot.name} />
+      <img loading="lazy" src={spot.previewImage} alt={spot.name} />
       <div className="spotGridItemDescription" style={{ color: "#2b2b2b" }}>
         <strong className="tooltip">{spot.name}</strong>
-
         <div className="spotGridInfo">
           <div>
             <strong className="cityState">
@@ -35,10 +33,10 @@ export default function UserSpotInfo({ spot }) {
             </strong>
           </div>
 
-          {spot.avgRating ? (
+          {spot.avgStarRating ? (
             <div className="spotGridItemStarRating">
               <GoStarFill style={{ color: "#ffd60a" }} />
-              {spot.avgRating.toFixed(1)}
+              {spot.avgStarRating.toFixed(1)}
             </div>
           ) : (
             <div className="spotGridItemStarRating">
@@ -49,10 +47,17 @@ export default function UserSpotInfo({ spot }) {
         <div className="spotGridItemPrice">
           <strong>${spot.price} night</strong>
 
-          <Link to={`/spots/${spot.id}/edit`}>
-            <button>Update</button>
-          </Link>
-          <button onClick={handleDeleteClick}>Delete</button>
+          <div>
+            <Link to={`/spots/${spot.id}/edit`} className="updateButton">
+              Update
+            </Link>
+          </div>
+
+          <div>
+            <button type="button" onClick={handleDeleteClick}>
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

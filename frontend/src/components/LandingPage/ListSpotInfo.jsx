@@ -1,6 +1,6 @@
 import { GoStarFill } from "react-icons/go";
 
-export default function SpotInfo({ spot }) {
+export default function ListSpotInfo({ spot }) {
   return (
     <div className="spotGridItem">
       <img src={spot.previewImage} alt={spot.name} />

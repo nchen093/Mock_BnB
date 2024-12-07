@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllSpots } from "../../store/spots";
-import SpotInfo from "./SpotInfo";
+import ListSpotInfo from "./ListSpotInfo";
 import "./ListOfSpots.css";
 
 const ListOfSpots = () => {
@@ -26,7 +26,7 @@ const ListOfSpots = () => {
               to={`/spots/${spot.id}`}
               style={{ textDecoration: "none" }}
             >
-              <SpotInfo spot={spot} />
+              <ListSpotInfo spot={spot} />
             </Link>
           ))}
         </div>

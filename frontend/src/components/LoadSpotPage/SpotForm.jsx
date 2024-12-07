@@ -13,7 +13,7 @@ const SpotForm = ({ spot, formType }) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [lat, setLat] = useState(90);
-  const [lng, setLng] = useState(90);
+  const [lng, setLng] = useState(180);
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -57,13 +57,12 @@ const SpotForm = ({ spot, formType }) => {
     if (!name) error.name = "Name is required";
     if (formType === "Create a New Spot" && !previewImage)
       error.previewurl = "Preview image is required.";
-    return error;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formErrors = validateForm();
-    if (Object.values(formErrors).length > 0) {
+    if (formErrors && Object.values(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
@@ -85,12 +84,10 @@ const SpotForm = ({ spot, formType }) => {
       previewImage,
     };
 
-    console.log("what data am I sending to ", newSpot); // Log the data you're sending
-
     let response;
     if (formType === "Update Your Spot") {
       response = await dispatch(putSpotThunk(newSpot));
-      console.log("what is my response :", response); // Check the response
+      console.log("what is my response :", response);
     } else if (formType === "Create a New Spot") {
       response = await dispatch(postSpotThunk(newSpot));
 

@@ -33,11 +33,12 @@ export default function ManageSpot() {
   return (
     <>
       <h1>Manage Your Spots</h1>
-      <button>
-        <Link className="createSpot" to="/spots/new">
-          Create a New Spot
-        </Link>
-      </button>
+      <div className="crateSpotbtn">
+        <button>
+          <Link to="/spots/new">Create a New Spot</Link>
+        </button>
+      </div>
+
       <div id="mainContain">
         <div className="spotGrid">
           {currentUserSpot?.map((spot) => (

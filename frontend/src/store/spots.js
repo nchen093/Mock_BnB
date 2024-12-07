@@ -10,7 +10,7 @@ const DELETE_SPOT = "/spots/deleteSpot";
 const DELETE_SPOT_DETAILS = "/spots/deleteSpotDetails";
 
 //action creator
-const loadSpots = (spots) => {
+export const loadSpots = (spots) => {
   return {
     type: GET_SPOTS,
     spots,
@@ -68,9 +68,9 @@ export const userSpots = () => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
     // console.log("Fetched spots:", data.Spots);
-    const spots = data.Spots;
-    dispatch(loadSpots(spots)); // communicate with redux
-    return spots;
+    // const spots = data.Spots;
+    dispatch(loadSpots(data)); // communicate with redux
+    return data;
   } else {
     const error = await res.json();
     return error;
@@ -78,7 +78,7 @@ export const userSpots = () => async (dispatch) => {
 };
 
 //Access the spot detail by spotId
-export const getOneSpot = (spotId) => async (dispatch) => {
+export const getOneSpotThunk = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
 
   if (res.ok) {
@@ -144,7 +144,7 @@ export const postImageThunk = (image) => async (dispatch) => {
 };
 
 // DELETE A SPOT
-export const deletedSpot = (spotId) => async (dispatch) => {
+export const deletedSpotThunk = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
   });
