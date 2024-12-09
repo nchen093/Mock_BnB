@@ -600,16 +600,16 @@ router.get("/", queryValidationRules, async (req, res) => {
       where: test,
       attributes: {
         include: [
-          [
-            sequelize.literal(`(
-              SELECT AVG("stars")
-              FROM "Reviews"
-              WHERE "Reviews"."spotId" = "Spot"."id"
-            )`),
-            "avgRating",
-          ],
+          [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
         ],
       },
+      include: [
+        {
+          model: Review,
+          attributes: [],
+        },
+      ],
+      group: ["Spot.id"],
       // ...pagination,
     });
 
