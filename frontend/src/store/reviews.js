@@ -41,7 +41,6 @@ const removedReview = ({ spotId, reviewId }) => {
 // Thunk
 //Get reviews by a spot's id
 export const getSpotReviewThunk = (spotId) => async (dispatch) => {
-  console.log("orginal spotId show!!!!!!", spotId);
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
   if (res.ok) {
@@ -97,7 +96,7 @@ export const deletedReviewThunk = (reviewId, spotId) => async (dispatch) => {
   });
 
   if (res.ok) {
-    dispatch(removedReview({ spotId, reviewId }));
+    dispatch(removedReview({ reviewId, spotId }));
   } else {
     const error = await res.json();
     return error;

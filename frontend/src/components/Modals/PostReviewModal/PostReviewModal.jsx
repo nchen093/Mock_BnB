@@ -9,15 +9,12 @@ export default function PostReviewModal({ spotId, onSubmitReview }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const [comment, setComment] = useState("");
-  const [star, setStar] = useState(0);
+  const [stars, setStar] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newReview = { comment, star };
-
-    // console.log("Submitting review:", newReview, "for spotId:", spotId);
-
-    await dispatch(createReviewThunk(newReview, spotId));
+    const newReview = { comment, stars };
+    await dispatch(createReviewThunk(spotId, newReview));
     if (onSubmitReview) {
       onSubmitReview();
     }
@@ -35,11 +32,11 @@ export default function PostReviewModal({ spotId, onSubmitReview }) {
           style={{ minWidth: "300px", minHeight: "200px" }}
         />
         <div className="star-rating">
-          <StarRating rating={star} setRating={setStar} /> Stars
+          <StarRating rating={stars} setRating={setStar} /> Stars
           <button
             className="sub-review"
             type="submit"
-            disabled={comment.length < 10 || star === 0}
+            disabled={comment.length < 10 || stars === 0}
           >
             Sumbit Your Review
           </button>

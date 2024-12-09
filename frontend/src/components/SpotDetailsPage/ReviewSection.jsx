@@ -11,8 +11,12 @@ export default function ReviewList({ spotId }) {
   const [isLoading, setIsLoading] = useState(true);
   const { setModalContent, setOnModalClose, closeModal } = useModal();
 
-  const reviews = useSelector((state) => state.reviews[spotId]);
-  const selectedSpot = useSelector((state) => state.spots[spotId]);
+  const reviewData = useSelector((state) => state.reviews);
+  const reviews = reviewData[spotId];
+
+  const spotData = useSelector((state) => state.spots);
+  const selectedSpot = spotData[spotId];
+
   const currentUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
