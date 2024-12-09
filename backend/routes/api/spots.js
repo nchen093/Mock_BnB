@@ -546,6 +546,7 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
     price,
     previewImage,
   } = req.body;
+
   try {
     const spot = await Spot.create({
       ownerId,
