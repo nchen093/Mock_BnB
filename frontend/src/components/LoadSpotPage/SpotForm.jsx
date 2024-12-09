@@ -51,12 +51,18 @@ const SpotForm = ({ spot, formType }) => {
     if (!address) error.address = "Address is required";
     if (!city) error.city = "City is required";
     if (!state) error.state = "State is required";
+    if (!lat || lat > 90 || lat < -90)
+      error.lat = "Latitude must be within -90 and 90";
+    if (!lng || lng > 180 || lng < -180)
+      error.lng = "Longitude must be within -180 and 180";
     if (!description || description.length < 30)
       error.description = "Description needs 30 or more characters";
     if (!price) error.price = "Price is required";
     if (!name) error.name = "Name is required";
     if (formType === "Create a New Spot" && !previewImage)
-      error.previewurl = "Preview image is required.";
+      error.previewImage = "Preview image is required.";
+
+    return error;
   };
 
   const handleSubmit = async (e) => {
@@ -87,10 +93,10 @@ const SpotForm = ({ spot, formType }) => {
     let response;
     if (formType === "Update Your Spot") {
       response = await dispatch(putSpotThunk(newSpot));
-      console.log("what is my response :", response);
+
+      console.log("what is this response shown?", response);
     } else if (formType === "Create a New Spot") {
       response = await dispatch(postSpotThunk(newSpot));
-
       const listImages = [
         { spotId: response.id, preview: true, url: previewImage },
         { spotId: response.id, preview: false, url: nonPrviewImg1 },
@@ -103,11 +109,11 @@ const SpotForm = ({ spot, formType }) => {
       );
     }
 
-    if (newSpot.errors) {
-      setErrors(newSpot.errors);
-    } else {
-      navigate(`/spots/${response.id}`);
+    if (response.errors) {
+      setErrors(response.errors);
     }
+
+    navigate(`/spots/${response.id}`);
   };
 
   return (
@@ -291,7 +297,9 @@ const SpotForm = ({ spot, formType }) => {
             )}
             <div className="line"></div>
             <button className="createBtn" type="submit">
-              create spot
+              {formType === "Create a New Spot"
+                ? "Create Spot"
+                : "Update Your Spot"}
             </button>
           </>
         </form>

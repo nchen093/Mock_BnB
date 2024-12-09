@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useModal } from "../../context/Modal";
-import { getSpotReviewThunk } from "../../store/reviews";
+import { getSpotReviewThunk, deletedReviewThunk } from "../../store/reviews";
 import { GoStarFill } from "react-icons/go";
-// import DeleteReviewModal from "../Modals/DeleteReviewModal/DeleteReviewModal";
+import DeleteReviewModal from "../Modals/DeleteReviewModal/DeleteReviewModal";
 import PostReviewModal from "../Modals/PostReviewModal/postReviewModal";
 
 export default function ReviewList({ spotId }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const { setModalContent, setOnModalClose } = useModal();
+  const { setModalContent, setOnModalClose, closeModal } = useModal();
 
   const reviews = useSelector((state) => state.reviews[spotId]);
   const selectedSpot = useSelector((state) => state.spots[spotId]);
@@ -32,37 +32,40 @@ export default function ReviewList({ spotId }) {
     ? (sumStars / reviews.Reviews.length).toFixed(1)
     : null;
 
-  //   const userReviewed =
-  //     numComments &&
-  //     currentUser &&
-  //     reviews.Reviews.find((review) => review.userId === currentUser.id);
+  // hasReviewed
+  const userReviewed =
+    numComments &&
+    currentUser &&
+    reviews.Reviews.find((review) => review.userId === currentUser.id);
 
-  const userOwner = selectedSpot && currentUser?.id === selectedSpot?.ownerId;
+  // is the spot owner
+  const userOwner =
+    currentUser && selectedSpot && currentUser?.id === selectedSpot?.ownerId;
 
   const openCommentModal = () => {
     setOnModalClose(() => {});
     setModalContent(
       <PostReviewModal
         spotId={spotId}
-        onSubmit={() => dispatch(getSpotReviewThunk(spotId))}
+        onSubmitReview={() => dispatch(getSpotReviewThunk(spotId))}
       />
     );
   };
 
-  //   const handleDeleteBtn = (reviewId, spotId) => {
-  //     dispatch(deletedReviewThunk(reviewId, spotId));
-  //     closeModal();
-  //   };
+  const handleDeleteClick = (reviewId) => {
+    setModalContent(
+      <DeleteReviewModal
+        onDelete={() => handleDeleteBtn(reviewId, spotId)}
+        onClose={closeModal}
+        type="Review"
+      />
+    );
+  };
 
-  //   const handleDeleteClick = (reviewId) => {
-  //     setModalContent(
-  //       <DeleteReviewModal
-  //         onDelete={() => handleDeleteBtn(reviewId, spotId)}
-  //         onClose={closeModal}
-  //         type="Review"
-  //       />
-  // );
-  //};
+  const handleDeleteBtn = async (reviewId, spotId) => {
+    await dispatch(deletedReviewThunk(reviewId, spotId));
+    closeModal();
+  };
 
   if (isLoading) {
     return <div>Loading....</div>;
@@ -73,13 +76,13 @@ export default function ReviewList({ spotId }) {
       {numComments ? (
         <>
           <h3>
-            <GoStarFill style={{ color: "#ffd60a" }} /> {avgStarRating} .{" "}
-            {reviews.Reviews.length}
+            <GoStarFill style={{ color: "#ffd60a" }} />
+            {avgStarRating} . {reviews.Reviews.length}
             {reviews.Reviews.length === 1 ? "Review" : "Reviews"}
           </h3>
 
           {/* you are not the owner and you did not comment */}
-          {currentUser && numComments === 0 && !userOwner && (
+          {!userReviewed && !userOwner && currentUser && (
             <button onClick={openCommentModal}>Post Your Review</button>
           )}
 
@@ -88,6 +91,7 @@ export default function ReviewList({ spotId }) {
               (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
             ).map((review) => {
               const dateComment = new Date(review.updatedAt);
+
               return (
                 <div key={review.id}>
                   <p>
@@ -99,12 +103,33 @@ export default function ReviewList({ spotId }) {
                     currentUser.id === review.userId &&
                     !userOwner}
                   <p>{review.comment}</p>
+                  {currentUser &&
+                    currentUser.id === review.userId &&
+                    !userOwner && (
+                      <button onClick={() => handleDeleteClick(review.id)}>
+                        Delete
+                      </button>
+                    )}
                 </div>
               );
             })}
           </div>
         </>
-      ) : null}
+      ) : currentUser && !userOwner ? (
+        <>
+          <h2>
+            <GoStarFill style={{ color: "#ffd60a" }} />
+            New
+          </h2>
+          <p>Be the first to post a review!</p>
+          <button onClick={openCommentModal}>Post your Review</button>
+        </>
+      ) : (
+        <h3>
+          <GoStarFill style={{ color: "#ffd60a" }} />
+          New
+        </h3>
+      )}
     </div>
   );
 }

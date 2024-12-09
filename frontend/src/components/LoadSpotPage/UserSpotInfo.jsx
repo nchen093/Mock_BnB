@@ -33,10 +33,10 @@ export default function UserSpotInfo({ spot }) {
             </strong>
           </div>
 
-          {spot.avgStarRating ? (
+          {spot.avgRating ? (
             <div className="spotGridItemStarRating">
               <GoStarFill style={{ color: "#ffd60a" }} />
-              {spot.avgStarRating.toFixed(1)}
+              {spot.avgRating.toFixed(1)}
             </div>
           ) : (
             <div className="spotGridItemStarRating">
@@ -44,6 +44,7 @@ export default function UserSpotInfo({ spot }) {
             </div>
           )}
         </div>
+
         <div className="spotGridItemPrice">
           <strong>${spot.price} night</strong>
 

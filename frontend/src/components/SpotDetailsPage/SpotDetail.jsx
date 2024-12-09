@@ -13,7 +13,8 @@ export default function SpotDetail() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
 
-  const spots = useSelector((state) => state.spots[spotId]);
+  const spotData = useSelector((state) => state.spots);
+  const spots = spotData[spotId];
 
   useEffect(() => {
     dispatch(getOneSpotThunk(spotId));

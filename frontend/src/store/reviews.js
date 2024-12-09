@@ -2,7 +2,7 @@ import { csrfFetch } from "./csrf";
 
 //Action Types
 const GET_Reviews = "/spots/loadReviews";
-const GET_USER_REVIEWS = "/spots/loadComments";
+// const GET_USER_REVIEWS = "/spots/loadComments";
 const POST_Review = "/spots/createReview";
 const DELETE_Review = "/spots/deleteReview";
 
@@ -15,13 +15,13 @@ const loadReviews = ({ spotId, comments }) => {
   };
 };
 
-const loadUserReviews = ({ userId, comments }) => {
-  return {
-    type: GET_USER_REVIEWS,
-    userId,
-    comments,
-  };
-};
+// const loadUserReviews = ({ userId, comments }) => {
+//   return {
+//     type: GET_USER_REVIEWS,
+//     userId,
+//     comments,
+//   };
+// };
 
 const postReview = (review) => {
   return {
@@ -41,7 +41,9 @@ const removedReview = ({ spotId, reviewId }) => {
 // Thunk
 //Get reviews by a spot's id
 export const getSpotReviewThunk = (spotId) => async (dispatch) => {
+  console.log("orginal spotId show!!!!!!", spotId);
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+
   if (res.ok) {
     const comments = await res.json();
     dispatch(loadReviews({ spotId, comments }));
@@ -53,20 +55,25 @@ export const getSpotReviewThunk = (spotId) => async (dispatch) => {
 };
 
 //Get the review base on user's Id
-export const getUserSpotReviewThunk = () => async (dispatch) => {
-  const res = await csrfFetch(`/api/reviews/`);
-  if (res.ok) {
-    const reviews = await res.json();
-    dispatch(loadUserReviews(reviews));
-    return reviews;
-  } else {
-    const error = await res.json();
-    return error;
-  }
-};
+// export const getUserSpotReviewThunk = () => async (dispatch) => {
+//   const res = await csrfFetch(`/api/reviews/`);
+//   if (res.ok) {
+//     const reviews = await res.json();
+//     dispatch(loadUserReviews(reviews));
+//     return reviews;
+//   } else {
+//     const error = await res.json();
+//     return error;
+//   }
+// };
 
 //Create a Review for spot based on the spot's id
 export const createReviewThunk = (spotId, review) => async (dispatch) => {
+  // console.log("Original spotId, what does it turn out:", spotId); // Log spotId before conversion
+
+  // const spotIdAsNum = Number(spotId);
+  // console.log("Converted spotId:", spotIdAsNum); // Log after conversion
+
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     body: JSON.stringify(review),
@@ -78,6 +85,7 @@ export const createReviewThunk = (spotId, review) => async (dispatch) => {
     return newReview;
   } else {
     const error = await res.json();
+    console.error("Error creating review:", error);
     return error;
   }
 };
