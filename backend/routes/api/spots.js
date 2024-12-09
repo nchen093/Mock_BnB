@@ -573,20 +573,19 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
 
 // Add query and GET ALL Spot
 router.get("/", queryValidationRules, async (req, res) => {
-  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
-    req.query;
+  let { minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
-  page = parseInt(page);
-  size = parseInt(size);
+  // page = parseInt(page);
+  // size = parseInt(size);
 
-  if (isNaN(page) || page < 1) page = 1;
-  if (isNaN(size) || size < 1 || size > 20) size = 20;
+  // if (isNaN(page) || page < 1) page = 1;
+  // if (isNaN(size) || size < 1 || size > 20) size = 20;
 
-  const pagination = {};
-  if (page >= 1 && size >= 1) {
-    pagination.limit = size;
-    pagination.offset = size * (page - 1);
-  }
+  // const pagination = {};
+  // if (page >= 1 && size >= 1) {
+  //   pagination.limit = size;
+  //   pagination.offset = size * (page - 1);
+  // }
 
   const test = {};
   if (minLat) test.lat = { [Op.gte]: parseFloat(minLat) };
@@ -611,7 +610,7 @@ router.get("/", queryValidationRules, async (req, res) => {
           ],
         ],
       },
-      ...pagination,
+      // ...pagination,
     });
 
     const spotsWithReviews = spots.map((spot) => ({
@@ -621,8 +620,8 @@ router.get("/", queryValidationRules, async (req, res) => {
 
     return res.json({
       Spots: spotsWithReviews,
-      page,
-      size,
+      // page,
+      // size,
     });
   } catch (e) {
     console.error(e);
