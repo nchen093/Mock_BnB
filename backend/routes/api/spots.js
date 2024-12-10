@@ -613,10 +613,17 @@ router.get("/", queryValidationRules, async (req, res) => {
       // ...pagination,
     });
 
-    const spotsWithReviews = spots.map((spot) => ({
-      ...spot.dataValues,
-      avgRating: parseFloat(spot.dataValues.avgRating) || 0, // Handle cases where there are no reviews
-    }));
+    // const spotsWithReviews = spots.map((spot) => ({
+    //   ...spot.dataValues,
+    //   avgRating: parseFloat(spot.dataValues.avgRating) || 0, // Handle cases where there are no reviews
+    // }));
+
+    const spotsWithReviews = spots.map((spot) => {
+      return {
+        ...spot.dataValues,
+        avgRating: spot.dataValues.avgRating,
+      };
+    });
 
     return res.json({
       Spots: spotsWithReviews,
