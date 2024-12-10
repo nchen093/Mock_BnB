@@ -17,7 +17,7 @@ export default function ListSpotInfo({ spot }) {
           {spot.avgRating ? (
             <div className="spotGridItemStarRating">
               <GoStarFill style={{ color: "#ffd60a" }} />
-              {spot.avgRating.toFixed(1)}
+              {spot.avgRating}
             </div>
           ) : (
             <div className="spotGridItemStarRating">
