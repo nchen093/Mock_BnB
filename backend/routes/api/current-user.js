@@ -39,7 +39,7 @@ router.get("/spots", async (req, res) => {
       ...spot.dataValues,
       avgRating: spot.dataValues.avgRating
         ? parseFloat(spot.dataValues.avgRating).toFixed(1)
-        : 0,
+        : null,
     };
   });
 
