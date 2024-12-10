@@ -33,6 +33,18 @@ router.get("/spots", async (req, res) => {
     group: ["Spot.id"],
   });
 
+  const spotsWithReviews = spots.map((spot) => ({
+    ...spot.dataValues,
+    avgRating: parseFloat(spot.dataValues.avgRating).toFixed(1) || 0,
+  }));
+
+  return res.json({
+    Spots: spotsWithReviews,
+
+    // page,
+    // size,
+  });
+
   return res.status(200).json(spots);
 });
 
