@@ -18,12 +18,12 @@ The models/index file will call this method automatically.*/
         allowNull: false,
         references: {
           model: "Spots",
-          key: "id",
+          onDelete: "CASCADE",
         },
-        onDelete: "CASCADE",
       },
+
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       preview: {

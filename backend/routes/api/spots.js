@@ -332,7 +332,7 @@ router.post(
 
       // Create a new review if no existing review is found
       const newReview = await Review.create({
-        spotId,
+        spotId: parseFloat(spotId),
         userId,
         comment,
         stars,
@@ -468,7 +468,6 @@ router.put(
       name,
       description,
       price,
-      previewImage,
     } = req.body;
 
     try {
@@ -491,12 +490,9 @@ router.put(
         name,
         description,
         price,
-        previewImage,
       });
 
       const updatedSpot = updateSpot.get({ plain: true });
-
-      delete updatedSpot.previewImage;
 
       return res.status(200).json(updatedSpot);
     } catch (e) {
@@ -519,8 +515,14 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
       return res.status(404).json({ message: "Spot couldn't be found" });
     }
 
-    await spot.destroy();
+    const { user } = req;
+    if (spot.ownerId !== user.id) {
+      return res.status(403).json({
+        message: "Forbidden",
+      });
+    }
 
+    await spot.destroy();
     return res.status(200).json({ message: "Successfully deleted" });
   } catch (e) {
     console.error(e);
@@ -534,22 +536,12 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
   const { user } = req;
   const ownerId = user.id;
 
-  const {
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-    previewImage,
-  } = req.body;
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
 
   try {
     const spot = await Spot.create({
-      ownerId,
+      ownerId: user.id,
       address,
       city,
       state,
@@ -559,7 +551,6 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
       name,
       description,
       price,
-      previewImage,
     });
 
     return res.status(201).json(spot);
@@ -597,6 +588,7 @@ router.get("/", queryValidationRules, async (req, res) => {
 
   try {
     const spots = await Spot.findAll({
+      // ...pagination,
       where: test,
       attributes: {
         include: [
@@ -608,14 +600,20 @@ router.get("/", queryValidationRules, async (req, res) => {
           model: Review,
           attributes: [],
         },
+        {
+          model: SpotImage,
+          attributes: ["url"],
+          where: { preview: true },
+          required: false,
+        },
       ],
-      group: ["Spot.id"],
-      // ...pagination,
+      group: ["Spot.id", "SpotImages.id"],
     });
 
     const spotsWithReviews = spots.map((spot) => ({
       ...spot.dataValues,
       avgRating: parseFloat(spot.dataValues.avgRating).toFixed(1) || 0,
+      previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null,
     }));
 
     return res.json({

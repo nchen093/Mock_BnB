@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const express = require("express");
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { User, Spot } = require("../../db/models");
+const { User, Spot, SpotImage } = require("../../db/models");
 const bookingsRouter = require("./bookings.js");
 const router = express.Router();
 const { Review } = require("../../db/models");
@@ -30,8 +30,14 @@ router.get("/spots", async (req, res) => {
         model: Review,
         attributes: [],
       },
+      {
+        model: SpotImage,
+        attributes: ["url"],
+        where: { preview: true },
+        required: false,
+      },
     ],
-    group: ["Spot.id"],
+    group: ["Spot.id", "SpotImages.id"],
   });
 
   const spotsDetails = spots.map((spot) => {
@@ -40,6 +46,7 @@ router.get("/spots", async (req, res) => {
       avgRating: spot.dataValues.avgRating
         ? parseFloat(spot.dataValues.avgRating).toFixed(1)
         : null,
+      previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null,
     };
   });
 

@@ -19,17 +19,21 @@ module.exports = {
         spotId: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          reference: { model: "Spots" },
+          onDelete: "CASCADE",
         },
         userId: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          reference: { model: "Users" },
+          onDelete: "CASCADE",
         },
         comment: {
           type: Sequelize.STRING(256),
           allowNull: false,
         },
         stars: {
-          type: Sequelize.DECIMAL,
+          type: Sequelize.FLOAT,
           allowNull: false,
         },
         createdAt: {

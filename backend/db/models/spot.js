@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Spot.belongsTo(models.User, { foreignKey: "ownerId", as: "Owner" });
+
       Spot.hasMany(models.SpotImage, {
         foreignKey: "spotId",
         onDelete: "CASCADE",
@@ -28,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: "Users",
           key: "id",
+          onDelete: "CASCADE",
         },
-        onDelete: "CASCADE",
       },
       address: {
         type: DataTypes.STRING,
@@ -83,20 +84,12 @@ module.exports = (sequelize, DataTypes) => {
           min: 0,
         },
       },
-      previewImage: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {
       sequelize,
       modelName: "Spot",
-      defaultScope: {
-        attributes: {
-          exclude: [],
-        },
-      },
     }
   );
+
   return Spot;
 };

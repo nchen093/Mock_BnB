@@ -19,6 +19,8 @@ module.exports = {
         ownerId: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          reference: { model: "User" },
+          onDelete: "CASCADE",
         },
         address: {
           type: Sequelize.STRING(256),
@@ -37,10 +39,10 @@ module.exports = {
           allowNull: false,
         },
         lat: {
-          type: Sequelize.DECIMAL,
+          type: Sequelize.FLOAT,
         },
         lng: {
-          type: Sequelize.DECIMAL,
+          type: Sequelize.FLOAT,
         },
         name: {
           type: Sequelize.STRING(256),
@@ -51,11 +53,7 @@ module.exports = {
           allowNull: false,
         },
         price: {
-          type: Sequelize.DECIMAL,
-          allowNull: false,
-        },
-        previewImage: {
-          type: Sequelize.STRING,
+          type: Sequelize.FLOAT,
           allowNull: false,
         },
 

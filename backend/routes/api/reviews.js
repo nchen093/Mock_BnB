@@ -2,6 +2,7 @@ const express = require("express");
 const { User, Spot, Review, ReviewImage } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 
 const router = express.Router();
 
@@ -116,7 +117,7 @@ router.put("/:reviewId", validateReview, async (req, res) => {
 });
 
 // delete review
-router.delete("/:reviewId", async (req, res) => {
+router.delete("/:reviewId", requireAuth, async (req, res) => {
   const { user } = req;
   const { reviewId } = req.params;
   try {

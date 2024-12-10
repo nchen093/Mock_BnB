@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       stars: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.FLOAT,
         validate: {
           min: 1,
           max: 5,
