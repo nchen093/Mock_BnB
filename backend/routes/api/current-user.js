@@ -4,8 +4,9 @@ const { setTokenCookie, restoreUser } = require("../../utils/auth");
 const { User, Spot } = require("../../db/models");
 const bookingsRouter = require("./bookings.js");
 const router = express.Router();
-router.use("/bookings", bookingsRouter);
 const { Review } = require("../../db/models");
+
+router.use("/bookings", bookingsRouter);
 
 //get all spots by current user
 router.get("/spots", async (req, res) => {
@@ -33,19 +34,18 @@ router.get("/spots", async (req, res) => {
     group: ["Spot.id"],
   });
 
-  const spotsWithReviews = spots.map((spot) => ({
-    ...spot.dataValues,
-    avgRating: parseFloat(spot.dataValues.avgRating).toFixed(1) || 0,
-  }));
-
-  return res.json({
-    Spots: spotsWithReviews,
-
-    // page,
-    // size,
+  const spotsDetails = spots.map((spot) => {
+    return {
+      ...spot.dataValues,
+      avgRating: spot.dataValues.avgRating
+        ? parseFloat(spot.dataValues.avgRating).toFixed(1)
+        : 0,
+    };
   });
 
-  return res.status(200).json(spots);
+  return res.json({
+    Spots: spotsDetails,
+  });
 });
 
 router.get("/", async (req, res) => {
