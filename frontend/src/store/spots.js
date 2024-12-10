@@ -67,9 +67,9 @@ export const userSpots = () => async (dispatch) => {
 
   if (res.ok) {
     const data = await res.json();
-    // console.log("Fetched spots:", data.Spots);
-    // const spots = data.Spots;
-    dispatch(loadSpots(data)); // communicate with redux
+
+    const spots = data.Spots;
+    dispatch(loadSpots(spots)); // communicate with redux
     return data;
   } else {
     const error = await res.json();

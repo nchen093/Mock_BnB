@@ -36,9 +36,7 @@ export default function UserSpotInfo({ spot }) {
 
           <div className="spotGridItemStarRating">
             <GoStarFill style={{ color: "#ffd60a" }} />
-            {spot.avgRating && spot.avgRating !== "No Comment"
-              ? spot.avgRating
-              : "New"}
+            {spot.avgRating && spot.avgRating !== null ? spot.avgRating : "New"}
           </div>
         </div>
 
