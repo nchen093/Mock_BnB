@@ -50,13 +50,13 @@ module.exports = {
       },
       {
         spotId: 7,
-        userId: 4,
+        userId: 1,
         comment: "This spot is amazing",
         stars: 4.88,
       },
       {
         spotId: 8,
-        userId: 4,
+        userId: 2,
         comment: "This spot is amazing",
         stars: 4.88,
       },

@@ -38,7 +38,7 @@ module.exports = {
     await queryInterface.bulkDelete(
       options,
       {
-        spotId: [1, 2, 3], // Add conditions here if needed
+        spotId: [1, 2, 3],
       },
       {}
     );
