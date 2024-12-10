@@ -615,7 +615,7 @@ router.get("/", queryValidationRules, async (req, res) => {
 
     const spotsWithReviews = spots.map((spot) => ({
       ...spot.dataValues,
-      avgRating: parseFloat(spot.dataValues.avgRating) || 0,
+      avgRating: parseFloat(spot.dataValues.avgRating).toFixed(1) || 0,
     }));
 
     return res.json({
