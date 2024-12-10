@@ -72,20 +72,21 @@ export default function SpotDetail() {
               Hosted by {spots.Owner.firstName} {spots.Owner.lastName}
             </h3>
           )}
-          <p>{spots.description}</p>
-        </div>
-        <div className="reserveContainer">
-          <div className="spot-night">
-            <strong>${spots.price} per night</strong>
+          <div className="reserveContainer">
+            <div className="description">
+              <p>{spots.description}</p>
+            </div>
+            <div className="spot-night">
+              <strong>${spots.price} per night</strong>
+              <StarReview spots={spots} />
+              <button className="reserveBtn" onClick={handleReserve}>
+                Reserve
+              </button>
+            </div>
           </div>
-
-          <StarReview spots={spots} />
-          <button className="reserveBtn" onClick={handleReserve}>
-            Reserve
-          </button>
-          <div className="spotDetailsLine"></div>
-          <ReviewList spotId={spotId} />
         </div>
+        <div className="spotDetailsLine"></div>
+        <ReviewList spotId={spotId} className="review-list" />
       </div>
     </div>
   );

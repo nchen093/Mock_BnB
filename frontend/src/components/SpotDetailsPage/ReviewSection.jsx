@@ -4,7 +4,7 @@ import { useModal } from "../../context/Modal";
 import { getSpotReviewThunk, deletedReviewThunk } from "../../store/reviews";
 import { GoStarFill } from "react-icons/go";
 import DeleteReviewModal from "../Modals/DeleteReviewModal/DeleteReviewModal";
-import PostReviewModal from "../Modals/PostReviewModal/postReviewModal";
+import PostReviewModal from "../Modals/PostReviewModal/PostReviewModal";
 
 export default function ReviewList({ spotId }) {
   const dispatch = useDispatch();
@@ -20,32 +20,33 @@ export default function ReviewList({ spotId }) {
   const currentUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
-    dispatch(getSpotReviewThunk(spotId)).then(setIsLoading(false));
+    dispatch(getSpotReviewThunk(spotId)).then(() => setIsLoading(false));
   }, [dispatch, spotId]);
 
-  // has comment
-  const numComments = reviews && reviews?.Reviews?.length > 0;
+  // Check if there are reviews
+  const numComments = reviews?.Reviews?.length > 0;
 
-  // the total stars that has comment
+  // Calculate total stars for the reviews
   const sumStars = numComments
     ? reviews.Reviews.reduce((sum, comment) => sum + comment.stars, 0)
     : 0;
 
-  // the avg star
+  // Average star rating
   const avgStarRating = numComments
     ? (sumStars / reviews.Reviews.length).toFixed(1)
     : null;
 
-  // hasReviewed
+  // Check if the user has already reviewed
   const userReviewed =
     numComments &&
     currentUser &&
-    reviews.Reviews.find((review) => review.userId === currentUser.id);
+    reviews.Reviews.some((review) => review.userId === currentUser.id);
 
-  // is the spot owner
+  // Check if the current user is the spot owner
   const userOwner =
-    currentUser && selectedSpot && currentUser?.id === selectedSpot?.ownerId;
+    currentUser && selectedSpot && currentUser.id === selectedSpot.ownerId;
 
+  // Open the Post Review Modal
   const openCommentModal = () => {
     setOnModalClose(() => {});
     setModalContent(
@@ -56,24 +57,31 @@ export default function ReviewList({ spotId }) {
     );
   };
 
+  // Open the Delete Review Modal
   const handleDeleteClick = (reviewId) => {
     setModalContent(
       <DeleteReviewModal
-        onDelete={() => handleDeleteBtn(reviewId, spotId)}
+        onDelete={() => handleReviewDelete(reviewId)}
         onClose={closeModal}
         type="Review"
       />
     );
   };
 
-  const handleDeleteBtn = async (reviewId, spotId) => {
-    await dispatch(deletedReviewThunk(reviewId, spotId));
+  // Handle review deletion
+  const handleReviewDelete = async (reviewId) => {
+    await dispatch(deletedReviewThunk(reviewId));
     closeModal();
   };
 
   if (isLoading) {
     return <div>Loading....</div>;
   }
+
+  // Sort reviews before rendering
+  const sortedReviews = reviews.Reviews.sort(
+    (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+  );
 
   return (
     <div>
@@ -82,18 +90,16 @@ export default function ReviewList({ spotId }) {
           <h3>
             <GoStarFill style={{ color: "#ffd60a" }} />
             {avgStarRating} . {reviews.Reviews.length}
-            {reviews.Reviews.length === 1 ? "Review" : "Reviews"}
+            {reviews.Reviews.length === 1 ? " Review" : " Reviews"}
           </h3>
 
-          {/* you are not the owner and you did not comment */}
+          {/* User can post a review if they haven't already, and they aren't the spot owner */}
           {!userReviewed && !userOwner && currentUser && (
             <button onClick={openCommentModal}>Post Your Review</button>
           )}
 
           <div>
-            {reviews.Reviews.sort(
-              (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-            ).map((review) => {
+            {sortedReviews.map((review) => {
               const dateComment = new Date(review.updatedAt);
 
               return (
@@ -103,17 +109,19 @@ export default function ReviewList({ spotId }) {
                       (currentUser && currentUser.firstName)}
                   </p>
                   <span>{dateComment.toLocaleDateString()}</span>
-                  {currentUser &&
-                    currentUser.id === review.userId &&
-                    !userOwner}
                   <p>{review.comment}</p>
-                  {currentUser &&
-                    currentUser.id === review.userId &&
-                    !userOwner && (
-                      <button onClick={() => handleDeleteClick(review.id)}>
-                        Delete
-                      </button>
-                    )}
+                  <div>
+                    {currentUser &&
+                      currentUser.id === review.userId &&
+                      !userOwner && (
+                        <button
+                          className="reviewDelbtn"
+                          onClick={() => handleDeleteClick(review.id)}
+                        >
+                          Delete
+                        </button>
+                      )}
+                  </div>
                 </div>
               );
             })}

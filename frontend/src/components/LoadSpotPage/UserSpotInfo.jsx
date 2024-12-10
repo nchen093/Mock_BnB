@@ -21,10 +21,9 @@ export default function UserSpotInfo({ spot }) {
     );
   };
 
-  console.log("What is my avgRating", spot.avgRating);
   return (
     <div className="spotGridItem">
-      <img loading="lazy" src={spot.previewImage} alt={spot.name} />
+      <img src={spot.previewImage} alt={spot.name} loading="lazy" />
       <div className="spotGridItemDescription" style={{ color: "#2b2b2b" }}>
         <strong className="tooltip">{spot.name}</strong>
         <div className="spotGridInfo">

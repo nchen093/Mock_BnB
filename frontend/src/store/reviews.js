@@ -21,10 +21,9 @@ const postReview = (review) => {
   };
 };
 
-const removedReview = ({ spotId, reviewId }) => {
+const removedReview = (reviewId) => {
   return {
     type: DELETE_Review,
-    spotId,
     reviewId,
   };
 };
@@ -57,19 +56,18 @@ export const createReviewThunk = (spotId, review) => async (dispatch) => {
     return newReview;
   } else {
     const error = await res.json();
-    console.error("Error creating review:", error);
     return error;
   }
 };
 
 // Delete Review
-export const deletedReviewThunk = (reviewId, spotId) => async (dispatch) => {
+export const deletedReviewThunk = (reviewId) => async (dispatch) => {
   const res = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
   });
 
   if (res.ok) {
-    dispatch(removedReview({ reviewId, spotId }));
+    dispatch(removedReview(reviewId));
   } else {
     const error = await res.json();
     return error;
@@ -87,20 +85,18 @@ export default function reviewsReducer(state = initialState, action) {
         [spotId]: comments,
       };
     }
-
     case POST_Review: {
-      const { review } = action;
-      const spotId = action.review.spotId;
-      return {
-        ...state,
-        [spotId]: [...(state[spotId] || []), review],
-      };
+      const newState = { ...state };
+      newState[action.review.id] = action.review;
+      return newState;
     }
     case DELETE_Review: {
-      const { spotId, reviewId } = action;
+      const updatedReviews = state.reviews.filter(
+        (review) => review.id !== action.reviewId
+      );
       return {
         ...state,
-        [spotId]: state[spotId].filter((review) => review.id !== reviewId),
+        reviews: updatedReviews,
       };
     }
     default:

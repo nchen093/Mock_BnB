@@ -8,13 +8,11 @@ import "./ListOfSpots.css";
 const ListOfSpots = () => {
   const dispatch = useDispatch();
   const spotData = useSelector((state) => state.spots);
-  const spots = Object.values(spotData).filter((spot) => spot);
+  const spots = Object.values(spotData).filter((spot) => spot !== undefined);
 
   useEffect(() => {
     dispatch(getAllSpots());
   }, [dispatch]);
-
-  console.log(spotData);
 
   return (
     <>
