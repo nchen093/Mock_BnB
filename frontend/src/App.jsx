@@ -35,20 +35,20 @@ const router = createBrowserRouter([
         element: <ListOfSpots />,
       },
       {
-        path: "/spots/:spotId",
-        element: <SpotDetail />,
+        path: "/user/spots",
+        element: <ManageSpot />,
       },
       {
         path: "/spots/new",
         element: <CreateSpotForm />,
       },
       {
-        path: "/spots/:spotId/edit",
-        element: <EditSpotForm />,
+        path: "/spots/:spotId",
+        element: <SpotDetail />,
       },
       {
-        path: "/user/spots",
-        element: <ManageSpot />,
+        path: "/spots/:spotId/edit",
+        element: <EditSpotForm />,
       },
 
       {

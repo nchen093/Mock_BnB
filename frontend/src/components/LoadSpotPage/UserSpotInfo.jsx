@@ -21,6 +21,7 @@ export default function UserSpotInfo({ spot }) {
     );
   };
 
+  console.log("What is my avgRating", spot.avgRating);
   return (
     <div className="spotGridItem">
       <img loading="lazy" src={spot.previewImage} alt={spot.name} />
@@ -33,31 +34,31 @@ export default function UserSpotInfo({ spot }) {
             </strong>
           </div>
 
-          {spot.avgRating ? (
-            <div className="spotGridItemStarRating">
-              <GoStarFill style={{ color: "#ffd60a" }} />
-              {spot.avgRating.toFixed(1)}
-            </div>
-          ) : (
-            <div className="spotGridItemStarRating">
-              <GoStarFill style={{ color: "#ffd60a" }} /> New
-            </div>
-          )}
+          <div className="spotGridItemStarRating">
+            <GoStarFill style={{ color: "#ffd60a" }} />
+            {spot.avgRating && spot.avgRating > 0
+              ? spot.avgRating.toFixed(1)
+              : "New"}
+          </div>
         </div>
 
         <div className="spotGridItemPrice">
           <strong>${spot.price} night</strong>
 
-          <div>
+          <div className="update-deletbtn">
             <Link to={`/spots/${spot.id}/edit`} className="updateButton">
               Update
             </Link>
-          </div>
 
-          <div>
-            <button type="button" onClick={handleDeleteClick}>
-              Delete
-            </button>
+            <div>
+              <button
+                type="button"
+                onClick={handleDeleteClick}
+                className="spot-deletebtn"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
