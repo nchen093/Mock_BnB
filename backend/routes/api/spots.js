@@ -123,7 +123,7 @@ router.delete(
 
     try {
       const image = await SpotImage.findByPk({
-        where: { spotId, imageId },
+        where: { imageId, spotId },
         include: { model: Spot, attributes: ["ownerId"] },
       });
 
@@ -132,7 +132,6 @@ router.delete(
           .status(404)
           .json({ message: "Spot Image couldn't be found" });
       }
-
       const ownerId = image.Spot.ownerId;
       if (user.id !== ownerId) {
         return res
@@ -369,15 +368,13 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     }
 
     // create new Spotimage instance
-    const newSpot = await SpotImage.create(req.body);
+    const newSpot = await SpotImage.create({
+      spotId,
+      url,
+      preview,
+    });
 
-    const newSpotImage = {
-      id: newSpot.id,
-      url: newSpot.url,
-      preview: newSpot.preview,
-    };
-
-    return res.status(201).json(newSpotImage);
+    return res.status(201).json(newSpot);
   } catch (e) {
     console.error(e);
     return res
