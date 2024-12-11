@@ -126,6 +126,7 @@ router.delete(
         where: { id: imageId, spotId: spotId },
         include: { model: Spot, attributes: ["ownerId"] },
       });
+
       if (!image) {
         return res
           .status(404)
@@ -511,6 +512,7 @@ router.put(
 // Delete a spot
 router.delete("/:spotId", requireAuth, async (req, res, next) => {
   const { spotId } = req.params;
+  const { user } = req;
 
   try {
     const spot = await Spot.findByPk(spotId);
@@ -519,7 +521,6 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
       return res.status(404).json({ message: "Spot couldn't be found" });
     }
 
-    const { user } = req;
     if (spot.ownerId !== user.id) {
       return res.status(403).json({
         message: "Forbidden",
