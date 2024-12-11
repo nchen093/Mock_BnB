@@ -14,16 +14,10 @@ export default function ListSpotInfo({ spot }) {
             </strong>
           </div>
 
-          {spot.avgRating ? (
-            <div className="spotGridItemStarRating">
-              <GoStarFill style={{ color: "#ffd60a" }} />
-              {spot.avgRating}
-            </div>
-          ) : (
-            <div className="spotGridItemStarRating">
-              <GoStarFill style={{ color: "#ffd60a" }} /> New
-            </div>
-          )}
+          <div className="spotGridItemStarRating">
+            <GoStarFill style={{ color: "#ffd60a" }} />
+            {spot.avgRating && spot.avgRating !== null ? spot.avgRating : "New"}
+          </div>
         </div>
         <div className="spotGridItemPrice">
           <strong>${spot.price} night</strong>

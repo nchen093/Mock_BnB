@@ -67,7 +67,9 @@ export const deletedReviewThunk = (reviewId) => async (dispatch) => {
   });
 
   if (res.ok) {
-    dispatch(removedReview(reviewId));
+    const deleteReview = await res.json();
+    dispatch(removedReview(deleteReview));
+    return deleteReview;
   } else {
     const error = await res.json();
     return error;
@@ -91,14 +93,11 @@ export default function reviewsReducer(state = initialState, action) {
       return newState;
     }
     case DELETE_Review: {
-      const updatedReviews = state.reviews.filter(
-        (review) => review.id !== action.reviewId
-      );
-      return {
-        ...state,
-        reviews: updatedReviews,
-      };
+      const newState = { ...state };
+      newState[action.deleteReview] = action.deleteReview;
+      return newState;
     }
+
     default:
       return state;
   }

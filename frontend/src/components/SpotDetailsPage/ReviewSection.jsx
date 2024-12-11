@@ -2,12 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useModal } from "../../context/Modal";
 import { getSpotReviewThunk, deletedReviewThunk } from "../../store/reviews";
+import { getOneSpotThunk } from "../../store/spots";
+import { useNavigate } from "react-router";
 import { GoStarFill } from "react-icons/go";
 import DeleteReviewModal from "../Modals/DeleteReviewModal/DeleteReviewModal";
 import PostReviewModal from "../Modals/PostReviewModal/PostReviewModal";
 
 export default function ReviewList({ spotId }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const { setModalContent, setOnModalClose, closeModal } = useModal();
 
@@ -71,8 +74,13 @@ export default function ReviewList({ spotId }) {
   // Handle review deletion
   const handleReviewDelete = async (reviewId) => {
     await dispatch(deletedReviewThunk(reviewId));
+    await dispatch(getOneSpotThunk(spotId));
+    await dispatch(getSpotReviewThunk(spotId));
+    navigate(`/spots/${spotId}`);
     closeModal();
   };
+
+  // console.log("what is the result", handleReviewDelete);
 
   if (isLoading) {
     return <div>Loading....</div>;

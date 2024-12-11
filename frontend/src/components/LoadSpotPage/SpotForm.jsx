@@ -87,7 +87,6 @@ const SpotForm = ({ spot, formType }) => {
       description,
       name,
       price: parseFloat(price),
-      previewImage,
     };
 
     let response;
@@ -180,6 +179,7 @@ const SpotForm = ({ spot, formType }) => {
               placeholder="Latitude"
               onChange={(e) => setLat(e.target.value)}
             />
+            {errors.lat && <p>{errors.lat}</p>}
 
             <label>Longitude</label>
             <input
@@ -188,6 +188,7 @@ const SpotForm = ({ spot, formType }) => {
               placeholder="Longitude"
               onChange={(e) => setLng(e.target.value)}
             />
+            {errors.lng && <p>{errors.lng}</p>}
           </div>
           <div className="line"></div>
           <h2>Describe your place to guests</h2>
