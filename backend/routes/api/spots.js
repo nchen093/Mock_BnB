@@ -612,7 +612,10 @@ router.get("/", queryValidationRules, async (req, res) => {
 
     const spotsWithReviews = spots.map((spot) => ({
       ...spot.dataValues,
-      avgRating: parseFloat(spot.dataValues.avgRating).toFixed(1) || 0,
+      avgRating:
+        spot.dataValues.avgRating !== null
+          ? parseFloat(spot.dataValues.avgRating).toFixed(1)
+          : null,
       previewImage: spot.SpotImages.length > 0 ? spot.SpotImages[0].url : null,
     }));
 
