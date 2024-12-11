@@ -39,7 +39,7 @@ The models/index file will call this method automatically.*/
       modelName: "SpotImage",
       defaultScope: {
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: ["spotId", "createdAt", "updatedAt"],
         },
       },
     }
