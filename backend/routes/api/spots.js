@@ -352,11 +352,18 @@ router.post(
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   const { spotId } = req.params;
   const { url, preview } = req.body;
+  const { user } = req;
   try {
-    const spot = await Spot.findOne({ where: { id: spotId } });
+    const spot = await Spot.findByPk(spotId);
     if (!spot) {
       res.status(404);
       return res.json({ message: "Spot couldn't be found" });
+    }
+
+    if (spot.ownerId !== user.id) {
+      return res.status(403).json({
+        message: "Forbidden",
+      });
     }
 
     // create new Spotimage instance
@@ -366,14 +373,7 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
       preview,
     });
 
-    const spotImageResponse = newSpotImage.get({ plain: true });
-
-    delete spotImageResponse.spotId;
-    delete spotImageResponse.createdAt;
-    delete spotImageResponse.updatedAt;
-
-    //message: 'Image added successfully',
-    return res.status(201).json(spotImageResponse);
+    return res.status(201).json(newSpotImage);
   } catch (e) {
     console.error(e);
     return res
