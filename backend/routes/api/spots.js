@@ -350,9 +350,9 @@ router.post(
 
 // Create an Image for a spot
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
+  const { user } = req;
   const { spotId } = req.params;
   const { url, preview } = req.body;
-  const { user } = req;
   try {
     const spot = await Spot.findByPk(spotId);
     if (!spot) {
@@ -373,7 +373,7 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
       preview,
     });
 
-    const createdImage = await Spot.findByPk(newSpotImage.id, {
+    const createdImage = await SpotImage.findByPk(newSpotImage.id, {
       attributes: ["id", "url", "preview"],
     });
 
@@ -545,7 +545,7 @@ router.post("/", spotValidationRules, requireAuth, async (req, res, next) => {
 
   try {
     const spot = await Spot.create({
-      ownerId: user.id,
+      ownerId,
       address,
       city,
       state,
