@@ -17,7 +17,7 @@ const SpotForm = ({ spot, formType }) => {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
+  const [preview, setPreview] = useState("");
   const [nonPrviewImg1, setNonPrviewImg1] = useState("");
   const [nonPrviewImg2, setNonPrviewImg2] = useState("");
   const [nonPrviewImg3, setNonPrviewImg3] = useState("");
@@ -36,7 +36,7 @@ const SpotForm = ({ spot, formType }) => {
       setDescription(spot.description || "");
       setName(spot.name || "");
       setPrice(spot.price || "");
-      setPreviewImage(spot.previewImage || "");
+      setPreview(spot.preview || "");
       setNonPrviewImg1(spot.nonPrviewImg1 || "");
       setNonPrviewImg2(spot.nonPrviewImg2 || "");
       setNonPrviewImg3(spot.nonPrviewImg3 || "");
@@ -59,8 +59,8 @@ const SpotForm = ({ spot, formType }) => {
       error.description = "Description needs 30 or more characters";
     if (!price) error.price = "Price is required";
     if (!name) error.name = "Name is required";
-    if (formType === "Create a New Spot" && !previewImage)
-      error.previewImage = "Preview image is required.";
+    if (formType === "Create a New Spot" && !preview)
+      error.preview = "Preview image is required.";
 
     return error;
   };
@@ -95,7 +95,7 @@ const SpotForm = ({ spot, formType }) => {
     } else if (formType === "Create a New Spot") {
       response = await dispatch(postSpotThunk(newSpot));
       const listImages = [
-        { spotId: response.id, preview: true, url: previewImage },
+        { spotId: response.id, preview: true, url: preview },
         { spotId: response.id, preview: false, url: nonPrviewImg1 },
         { spotId: response.id, preview: false, url: nonPrviewImg2 },
         { spotId: response.id, preview: false, url: nonPrviewImg3 },
@@ -239,9 +239,9 @@ const SpotForm = ({ spot, formType }) => {
           <p>Submit a link to at least one photo to publish your spot.</p>
           <input
             name="previewImage"
-            value={previewImage}
+            value={preview}
             placeholder="Preview Image URL"
-            onChange={(e) => setPreviewImage(e.target.value)}
+            onChange={(e) => setPreview(e.target.value)}
             required
           />
           {errors.previewImage && <p>{errors.previewImage}</p>}
