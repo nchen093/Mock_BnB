@@ -92,8 +92,6 @@ const SpotForm = ({ spot, formType }) => {
     let response;
     if (formType === "Update Your Spot") {
       response = await dispatch(putSpotThunk(newSpot));
-
-      console.log("what is this response shown?", response);
     } else if (formType === "Create a New Spot") {
       response = await dispatch(postSpotThunk(newSpot));
       const listImages = [
@@ -247,6 +245,7 @@ const SpotForm = ({ spot, formType }) => {
             required
           />
           {errors.previewImage && <p>{errors.previewImage}</p>}
+
           <input
             id="nonPreviewImage1"
             name="image1"
